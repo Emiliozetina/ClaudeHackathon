@@ -54,10 +54,7 @@ export default function RegisterBusinessPage() {
       footer={
         <>
           Already registered?{" "}
-          <Link
-            href="/login"
-            className="font-medium text-[color:var(--color-brand)] hover:text-[color:var(--color-brand-hover)]"
-          >
+          <Link href="/login" className="type-label text-teal-700 hover:text-teal-800">
             Sign in
           </Link>
           .

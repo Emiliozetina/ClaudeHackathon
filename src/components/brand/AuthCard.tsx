@@ -11,25 +11,13 @@ interface Props {
 export function AuthCard({ eyebrow, title, subtitle, children, footer }: Props) {
   return (
     <div className="mx-auto w-full max-w-xl">
-      <div className="rounded-2xl border border-[color:var(--color-line)] bg-white p-7 shadow-[0_1px_2px_rgba(13,27,42,0.04)] sm:p-9">
-        {eyebrow ? (
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[color:var(--color-brand)]">
-            {eyebrow}
-          </p>
-        ) : null}
-        <h1 className="mt-2 text-2xl font-semibold tracking-tight text-[color:var(--color-ink)]">
-          {title}
-        </h1>
-        {subtitle ? (
-          <p className="mt-2 text-sm text-[color:var(--color-ink-muted)]">{subtitle}</p>
-        ) : null}
+      <div className="rounded-lg border border-border-subtle bg-surface-card p-7 shadow-elevation-1 sm:p-9">
+        {eyebrow ? <p className="type-overline text-teal-700">{eyebrow}</p> : null}
+        <h1 className="type-h2 mt-2 text-text-primary">{title}</h1>
+        {subtitle ? <p className="type-body mt-2 text-text-secondary">{subtitle}</p> : null}
         <div className="mt-6">{children}</div>
       </div>
-      {footer ? (
-        <p className="mt-5 text-center text-sm text-[color:var(--color-ink-muted)]">
-          {footer}
-        </p>
-      ) : null}
+      {footer ? <p className="type-body-sm mt-5 text-center text-text-secondary">{footer}</p> : null}
     </div>
   );
 }

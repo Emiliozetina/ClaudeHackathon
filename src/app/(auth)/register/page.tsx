@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Icon, Stepper } from "@/components/ui";
 
 const BusinessIcon = () => (
   <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="1.8">
@@ -26,21 +27,21 @@ function RoleCard({ href, title, description, bullets, icon }: RoleCardProps) {
   return (
     <Link
       href={href}
-      className="group relative flex flex-col gap-4 rounded-2xl border border-[color:var(--color-line)] bg-white p-6 shadow-[0_1px_2px_rgba(13,27,42,0.04)] transition hover:border-[color:var(--color-brand)] hover:shadow-[0_8px_24px_rgba(15,122,107,0.08)]"
+      className="group relative flex flex-col gap-4 rounded-lg border border-border-subtle bg-surface-card p-6 shadow-elevation-1 transition hover:border-teal-700"
     >
-      <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-[color:var(--color-brand-soft)] text-[color:var(--color-brand-hover)]">
+      <span className="inline-flex h-11 w-11 items-center justify-center rounded-md bg-teal-100 text-teal-800">
         {icon}
       </span>
       <div>
-        <h2 className="text-lg font-semibold text-[color:var(--color-ink)]">{title}</h2>
-        <p className="mt-1.5 text-sm text-[color:var(--color-ink-muted)]">{description}</p>
+        <h2 className="type-h4 text-text-primary">{title}</h2>
+        <p className="type-body mt-1.5 text-text-secondary">{description}</p>
       </div>
-      <ul className="flex flex-col gap-2 text-sm text-[color:var(--color-ink)]">
+      <ul className="type-body flex flex-col gap-2 text-text-primary">
         {bullets.map((b) => (
           <li key={b} className="flex items-start gap-2">
             <svg
               viewBox="0 0 20 20"
-              className="mt-0.5 h-4 w-4 flex-none text-[color:var(--color-brand)]"
+              className="mt-0.5 h-4 w-4 flex-none text-teal-700"
               fill="none"
               stroke="currentColor"
               strokeWidth="2.2"
@@ -51,9 +52,9 @@ function RoleCard({ href, title, description, bullets, icon }: RoleCardProps) {
           </li>
         ))}
       </ul>
-      <span className="mt-auto inline-flex items-center gap-1.5 text-sm font-medium text-[color:var(--color-brand)]">
+      <span className="type-button mt-auto inline-flex items-center gap-1.5 text-teal-700">
         Continue as {title.toLowerCase().includes("business") ? "a business" : "a student"}
-        <span aria-hidden>→</span>
+        <Icon name="arrow-right-teal" />
       </span>
     </Link>
   );
@@ -63,13 +64,9 @@ export default function RegisterPage() {
   return (
     <section className="flex flex-col items-center gap-10">
       <div className="text-center">
-        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[color:var(--color-brand)]">
-          Step 1 of 3
-        </p>
-        <h1 className="mt-3 text-3xl font-semibold tracking-tight text-[color:var(--color-ink)] sm:text-4xl">
-          How will you use NEXA?
-        </h1>
-        <p className="mt-3 max-w-xl text-sm text-[color:var(--color-ink-muted)]">
+        <Stepper current={1} className="justify-center" />
+        <h1 className="type-h1 mt-6 text-text-primary">How will you use NEXA?</h1>
+        <p className="type-body mx-auto mt-3 max-w-xl text-text-secondary">
           Choose the account that fits you. You can&apos;t switch later, but you can create a
           second one under a different email.
         </p>
@@ -98,17 +95,17 @@ export default function RegisterPage() {
           icon={<StudentIcon />}
         />
       </div>
-      <p className="text-sm text-[color:var(--color-ink-muted)]">
+      <p className="type-body-sm text-text-secondary">
         Already have an account?{" "}
         <Link
           href="/login"
-          className="font-medium text-[color:var(--color-brand)] hover:text-[color:var(--color-brand-hover)]"
+          className="type-label text-teal-700 hover:text-teal-800"
         >
           Sign in
         </Link>
         .
       </p>
-      <p className="text-xs text-[color:var(--color-ink-muted)]">
+      <p className="type-caption text-text-secondary">
         By continuing you agree to NEXA&apos;s Terms and Privacy Policy.
       </p>
     </section>

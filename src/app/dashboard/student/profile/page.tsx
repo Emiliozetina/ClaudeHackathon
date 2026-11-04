@@ -1,44 +1,34 @@
 import { redirect } from "next/navigation";
 import { StudentProfileForm } from "@/components/profile/StudentProfileForm";
-import { currentUser } from "@/lib/auth";
-import { db } from "@/lib/db";
+import { Chip } from "@/components/ui";
+import { requireUser } from "@/lib/auth";
+import { store } from "@/lib/store";
 
 export const instant = false;
 
 export default async function StudentProfileEditPage() {
-  const user = await currentUser();
-  if (!user) redirect("/login");
+  const user = await requireUser();
   if (user.role !== "student") redirect("/dashboard/business");
 
-  const profile = db.students.find((s) => s.userId === user.id);
+  const profile = store.students.find((x) => x.userId === user.id);
   if (!profile) redirect("/register/student");
 
   return (
     <section className="mx-auto w-full max-w-3xl px-6 py-10">
       <div className="mb-6 flex flex-col gap-2">
-        <div className="flex items-center gap-2">
-          <h1 className="text-2xl font-semibold tracking-tight text-[color:var(--color-ink)]">
-            Your profile
-          </h1>
+        <div className="flex flex-wrap items-center gap-3">
+          <h1 className="type-h3 text-text-primary">Your profile</h1>
           {profile.universityEmailVerified ? (
-            <span className="inline-flex items-center gap-1 rounded-full bg-[color:var(--color-brand-soft)] px-2.5 py-0.5 text-xs font-medium text-[color:var(--color-brand-hover)]">
-              <svg viewBox="0 0 20 20" className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth="3">
-                <path d="M4 10l4 4 8-9" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-              University email verified
-            </span>
+            <Chip type="teal">University email verified</Chip>
           ) : (
-            <span className="inline-flex items-center rounded-full border border-[color:var(--color-line)] bg-white px-2.5 py-0.5 text-xs text-[color:var(--color-ink-muted)]">
-              Not yet verified
-            </span>
+            <Chip type="neutral">Not yet verified</Chip>
           )}
         </div>
-        <p className="text-sm text-[color:var(--color-ink-muted)]">
-          Name, university, field of study, work history, motivations and goals — this is what
-          businesses see on your applications.
+        <p className="type-body-sm text-text-secondary">
+          Name, university, field of study, work history, motivations and goals — this is what businesses see on your applications.
         </p>
       </div>
-      <div className="rounded-2xl border border-[color:var(--color-line)] bg-white p-6 shadow-[0_1px_2px_rgba(13,27,42,0.04)] sm:p-8">
+      <div className="rounded-lg border border-border-subtle bg-surface-card p-6 shadow-elevation-1 sm:p-8">
         <StudentProfileForm initial={profile} />
       </div>
     </section>

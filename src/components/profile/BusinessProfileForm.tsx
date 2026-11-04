@@ -67,7 +67,7 @@ export function BusinessProfileForm({ initial }: { initial: Business }) {
           {status === "saving" ? "Saving…" : "Save profile"}
         </Button>
         {status === "saved" ? (
-          <span className="inline-flex items-center gap-1 text-sm text-[color:var(--color-brand-hover)]">
+          <span className="type-label inline-flex items-center gap-1 text-teal-800" role="status">
             <svg viewBox="0 0 20 20" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2.4">
               <path d="M4 10l4 4 8-9" strokeLinecap="round" strokeLinejoin="round" />
             </svg>

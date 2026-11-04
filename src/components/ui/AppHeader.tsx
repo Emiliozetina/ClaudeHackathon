@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import type { ReactNode } from "react";
 import { Avatar, type AvatarTone } from "./Avatar";
 import { Button } from "./Button";
 import { Icon } from "./Icon";
@@ -48,8 +49,8 @@ export type HeaderAccount = {
 };
 
 type AppHeaderProps =
-  | { role: "public"; account?: undefined }
-  | { role: "business" | "student"; account: HeaderAccount };
+  | { role: "public"; account?: undefined; actions?: ReactNode }
+  | { role: "business" | "student"; account: HeaderAccount; actions?: ReactNode };
 
 /** The link whose href is the longest prefix of the current path is active. */
 function activeHref(pathname: string, items: HeaderLink[]) {
@@ -96,6 +97,7 @@ export function AppHeader(props: AppHeaderProps) {
         ) : (
           <>
             {role === "business" && <Button href="/tasks/new">Post a task</Button>}
+            {props.actions}
             <button type="button" className="shrink-0 rounded-pill" aria-label="Notifications">
               <Icon name="notifications" />
             </button>

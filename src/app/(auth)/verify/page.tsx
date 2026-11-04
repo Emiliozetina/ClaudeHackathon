@@ -1,10 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AuthCard } from "@/components/brand/AuthCard";
 import { Button, Errors } from "@/components/forms/Field";
+import { Button as LinkButton, Icon } from "@/components/ui";
 import type { Role } from "@/types";
 
 interface Me {
@@ -58,7 +58,7 @@ export default function VerifyPage() {
   if (loading) {
     return (
       <AuthCard title="Verify your account">
-        <p className="text-sm text-[color:var(--color-ink-muted)]">Loading…</p>
+        <p className="type-body text-text-secondary">Loading…</p>
       </AuthCard>
     );
   }
@@ -78,29 +78,21 @@ export default function VerifyPage() {
     >
       {alreadyVerified ? (
         <div className="flex flex-col gap-4">
-          <div className="flex items-start gap-3 rounded-xl border border-[color:var(--color-brand-soft)] bg-[color:var(--color-brand-soft)]/60 p-4">
-            <span className="mt-0.5 inline-flex h-6 w-6 flex-none items-center justify-center rounded-full bg-[color:var(--color-brand)] text-white">
-              <svg viewBox="0 0 20 20" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="3">
-                <path d="M4 10l4 4 8-9" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
+          <div className="flex items-start gap-3 rounded-md border border-teal-100 bg-teal-50 p-4">
+            <span className="mt-0.5 inline-flex size-6 flex-none items-center justify-center rounded-pill bg-teal-700">
+              <Icon name="check" />
             </span>
             <div>
-              <p className="text-sm font-medium text-[color:var(--color-ink)]">
-                Your account is verified.
-              </p>
-              <p className="mt-1 text-sm text-[color:var(--color-ink-muted)]">
+              <p className="type-label text-text-primary">Your account is verified.</p>
+              <p className="type-body-sm mt-1 text-text-secondary">
                 You&apos;re all set — head to your dashboard to{" "}
                 {me?.role === "business" ? "post your first task" : "browse local work"}.
               </p>
             </div>
           </div>
-          <Link
-            href={dashboard}
-            className="inline-flex items-center justify-center gap-2 rounded-xl bg-[color:var(--color-brand)] px-4 py-2.5 text-sm font-medium text-white shadow-[0_1px_2px_rgba(13,27,42,0.08)] transition hover:bg-[color:var(--color-brand-hover)]"
-          >
+          <LinkButton href={dashboard} showArrow>
             Go to your dashboard
-            <span aria-hidden>→</span>
-          </Link>
+          </LinkButton>
         </div>
       ) : (
         <div className="flex flex-col gap-4">
@@ -108,7 +100,7 @@ export default function VerifyPage() {
           <Button type="button" onClick={onVerify} disabled={submitting}>
             {submitting ? "Checking…" : "Verify my account"}
           </Button>
-          <p className="text-xs text-[color:var(--color-ink-muted)]">
+          <p className="type-caption text-text-secondary">
             Verification runs against the email and location you registered with — no extra steps
             needed.
           </p>

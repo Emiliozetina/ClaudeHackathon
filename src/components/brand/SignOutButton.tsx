@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { Button } from "@/components/ui";
 
 export function SignOutButton() {
   const router = useRouter();
@@ -13,13 +14,8 @@ export function SignOutButton() {
     router.refresh();
   }
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={busy}
-      className="text-sm text-[color:var(--color-ink-muted)] hover:text-[color:var(--color-ink)] disabled:opacity-60"
-    >
+    <Button variant="ghost" onClick={onClick} disabled={busy}>
       {busy ? "Signing out…" : "Sign out"}
-    </button>
+    </Button>
   );
 }

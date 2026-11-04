@@ -98,7 +98,7 @@ export function StudentProfileForm({ initial }: { initial: Student }) {
       <Errors errors={errors} />
 
       <section className="flex flex-col gap-4">
-        <h2 className="text-sm font-semibold uppercase tracking-[0.1em] text-[color:var(--color-ink-muted)]">
+        <h2 className="type-overline text-text-secondary">
           About you
         </h2>
         <Field label="Full name" htmlFor="name">
@@ -140,7 +140,7 @@ export function StudentProfileForm({ initial }: { initial: Student }) {
       </section>
 
       <section className="flex flex-col gap-4">
-        <h2 className="text-sm font-semibold uppercase tracking-[0.1em] text-[color:var(--color-ink-muted)]">
+        <h2 className="type-overline text-text-secondary">
           Motivations & goals
         </h2>
         <Field label="What motivates you?" htmlFor="motivations">
@@ -163,22 +163,22 @@ export function StudentProfileForm({ initial }: { initial: Student }) {
 
       <section className="flex flex-col gap-3">
         <div className="flex items-center justify-between">
-          <h2 className="text-sm font-semibold uppercase tracking-[0.1em] text-[color:var(--color-ink-muted)]">
+          <h2 className="type-overline text-text-secondary">
             Work history
           </h2>
-          <Button type="button" variant="secondary" size="sm" onClick={addRow}>
+          <Button type="button" variant="secondary" onClick={addRow}>
             Add role
           </Button>
         </div>
         {rows.length === 0 ? (
-          <p className="rounded-xl border border-dashed border-[color:var(--color-line)] bg-[color:var(--color-brand-tint)] px-4 py-6 text-center text-sm text-[color:var(--color-ink-muted)]">
+          <p className="type-body-sm rounded-md border border-dashed border-border-default bg-teal-50 px-4 py-6 text-center text-text-secondary">
             No roles yet — add your part-time jobs, volunteering or projects.
           </p>
         ) : null}
         {rows.map((r) => (
           <div
             key={r.id}
-            className="flex flex-col gap-3 rounded-xl border border-[color:var(--color-line)] bg-[color:var(--color-brand-tint)]/40 p-4"
+            className="flex flex-col gap-3 rounded-md border border-border-subtle bg-teal-50 p-4"
           >
             <div className="grid gap-3 sm:grid-cols-2">
               <Field label="Title" htmlFor={`title-${r.id}`}>
@@ -222,7 +222,7 @@ export function StudentProfileForm({ initial }: { initial: Student }) {
             <button
               type="button"
               onClick={() => removeRow(r.id)}
-              className="self-end text-xs font-medium text-[color:var(--color-danger)] hover:underline"
+              className="type-label-sm self-end text-status-error hover:underline"
             >
               Remove role
             </button>
@@ -235,7 +235,7 @@ export function StudentProfileForm({ initial }: { initial: Student }) {
           {status === "saving" ? "Saving…" : "Save profile"}
         </Button>
         {status === "saved" ? (
-          <span className="inline-flex items-center gap-1 text-sm text-[color:var(--color-brand-hover)]">
+          <span className="type-label inline-flex items-center gap-1 text-teal-800" role="status">
             <svg viewBox="0 0 20 20" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2.4">
               <path d="M4 10l4 4 8-9" strokeLinecap="round" strokeLinejoin="round" />
             </svg>

@@ -5,6 +5,7 @@
 import { randomBytes, scryptSync, timingSafeEqual } from "crypto";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { connection } from "next/server";
 
 import { unauthorized } from "@/lib/errors";
 import { store } from "@/lib/store";
@@ -130,6 +131,8 @@ export function resolveUser(
 
 /** The signed-in user, or null. Server components, actions and route handlers. */
 export async function currentUser(): Promise<User | null> {
+  // Session expiry reads the clock, so this always runs at request time.
+  await connection();
   const jar = await cookies();
   return resolveUser(jar.get(SESSION_COOKIE)?.value, jar.get(DEMO_USER_COOKIE)?.value);
 }
