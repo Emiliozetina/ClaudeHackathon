@@ -3,26 +3,23 @@ import type { ThreadDetail } from "@/lib/messages";
 
 export function MessageList({ messages }: { messages: ThreadDetail["messages"] }) {
   if (messages.length === 0) {
-    return <p className="text-sm text-black/60 dark:text-white/60">No messages yet. Say hello!</p>;
+    return <p className="py-8 text-center text-sm text-black/60 dark:text-white/60">No messages yet. Say hello!</p>;
   }
 
   return (
-    <ol className="flex flex-col gap-3">
+    <ol className="flex flex-col gap-4">
       {messages.map((m) => (
-        <li key={m.id} className={m.mine ? "flex justify-end" : "flex justify-start"}>
-          <div
-            className={`max-w-[75%] rounded-lg border px-3 py-2 ${
-              m.mine
-                ? "border-black/20 bg-black/5 dark:border-white/20 dark:bg-white/10"
-                : "border-black/10 dark:border-white/10"
+        <li key={m.id} className={`flex flex-col ${m.mine ? "items-end" : "items-start"}`}>
+          <p
+            className={`max-w-[75%] whitespace-pre-wrap break-words rounded-2xl px-4 py-2 text-sm ${
+              m.mine ? "rounded-br-sm bg-teal-700 text-white" : "rounded-bl-sm bg-black/5 dark:bg-white/10"
             }`}
           >
-            <p className="text-xs text-black/60 dark:text-white/60">
-              <span className="font-medium">{m.mine ? "You" : m.senderName}</span> ·{" "}
-              <LocalTime iso={m.sentAt} />
-            </p>
-            <p className="mt-1 whitespace-pre-wrap break-words text-sm">{m.body}</p>
-          </div>
+            {m.body}
+          </p>
+          <p className="mt-1 text-xs text-black/60 dark:text-white/60">
+            {m.mine ? "You" : m.senderName} · <LocalTime iso={m.sentAt} compact />
+          </p>
         </li>
       ))}
     </ol>
