@@ -15,6 +15,13 @@ const icons = {
   "zap-teal-24": 24,
   // Exported from the Screens page (name-colour-size).
   "bulb-633806-18": 18,
+  "check-white-12": 12,
+  "chev-6b7280-14": 14,
+  "info-5b6472-14": 14,
+  "spark-f2a541-20": 20,
+  "store-0b2545-18": 18,
+  "x-0b2545-12": 12,
+  "x-white-12": 12,
   "chev-6b7280-20": 20,
   "users-5b6472-16": 16,
   "chevron-down-16": 16,
