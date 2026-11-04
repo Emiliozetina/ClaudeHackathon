@@ -1,9 +1,59 @@
-import type { Application, Business, Student, Task } from "@/types";
+import { scryptSync } from "crypto";
+import type { Application, Business, Student, Task, User } from "@/types";
 
 /**
  * Fake demo data only. No real people or contact details.
  * Replaced by the real database when it exists.
  */
+
+/**
+ * All demo accounts share the password "password" so the team can sign in
+ * without knowing per-user credentials. The salt is fixed so the hash is
+ * stable across restarts, which keeps seed snapshots diffable.
+ */
+function seedHash(password: string): string {
+  const N = 16384;
+  const salt = Buffer.from("00112233445566778899aabbccddeeff", "hex");
+  const hash = scryptSync(password, salt, 64, { N });
+  return `scrypt$${N}$${salt.toString("hex")}$${hash.toString("hex")}`;
+}
+const DEMO_PASSWORD_HASH = seedHash("password");
+
+export const seedUsers: User[] = [
+  {
+    id: "user_biz_1",
+    email: "owner@tynesideprint.test",
+    role: "business",
+    passwordHash: DEMO_PASSWORD_HASH,
+    verifiedAt: "2026-10-01T09:00:00.000Z",
+    createdAt: "2026-10-01T09:00:00.000Z",
+  },
+  {
+    id: "user_biz_2",
+    email: "owner@wearvalley.test",
+    role: "business",
+    passwordHash: DEMO_PASSWORD_HASH,
+    verifiedAt: "2026-10-01T09:00:00.000Z",
+    createdAt: "2026-10-01T09:00:00.000Z",
+  },
+  {
+    id: "user_stu_1",
+    email: "demo1@northumbria.ac.uk",
+    role: "student",
+    passwordHash: DEMO_PASSWORD_HASH,
+    verifiedAt: "2026-10-01T09:00:00.000Z",
+    createdAt: "2026-10-01T09:00:00.000Z",
+  },
+  {
+    id: "user_stu_2",
+    email: "demo2@durham.ac.uk",
+    role: "student",
+    passwordHash: DEMO_PASSWORD_HASH,
+    verifiedAt: "2026-10-01T09:00:00.000Z",
+    createdAt: "2026-10-01T09:00:00.000Z",
+  },
+];
+
 export const seedBusinesses: Business[] = [
   {
     id: "biz_1",

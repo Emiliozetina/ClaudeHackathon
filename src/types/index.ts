@@ -13,8 +13,16 @@ export interface User {
   id: ID;
   email: string;
   role: Role;
+  /** scrypt-hashed password: `scrypt$<N>$<salt-hex>$<hash-hex>`. */
+  passwordHash: string;
   verifiedAt?: string;
   createdAt: string;
+}
+
+export interface Session {
+  token: string;
+  userId: ID;
+  expiresAt: string;
 }
 
 /** A North East business. Verification checks the business is based here. */

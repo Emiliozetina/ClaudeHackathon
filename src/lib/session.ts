@@ -1,3 +1,4 @@
+import { SESSION_COOKIE, lookupSession, profileIdFor } from "@/lib/auth";
 import type { ID, Role } from "@/types";
 
 /** Who is making the request. */
@@ -8,22 +9,37 @@ export interface Actor {
 }
 
 /**
- * TEMPORARY placeholder until the real auth (api/auth, owned by the Auth /
- * Profiles work) lands. In development the caller identifies itself with the
- * `x-dev-role` and `x-dev-profile-id` headers. It always returns null in
- * production, so nothing here can be used to bypass real login.
+ * Resolves the caller.
  *
- * When auth is merged, replace the body of this function with the real
- * session lookup and keep the signature; the task/application routes only
- * depend on `getActor`.
+ * Order of lookup:
+ * 1. Session cookie set by `/api/auth/login` (the real path once the UI is in).
+ * 2. In development only, the `x-dev-role` / `x-dev-profile-id` headers used by
+ *    the task and application work before auth existed. This fallback keeps
+ *    those forms working while the UI switches over, and is a no-op in prod.
  */
 export function getActor(req: Request): Actor | null {
-  if (process.env.NODE_ENV === "production") return null;
+  const cookieHeader = req.headers.get("cookie") ?? "";
+  const token = readCookie(cookieHeader, SESSION_COOKIE);
+  const user = lookupSession(token);
+  if (user) {
+    const profileId = profileIdFor(user);
+    if (profileId) return { role: user.role, profileId };
+  }
 
-  const role = req.headers.get("x-dev-role");
-  const profileId = req.headers.get("x-dev-profile-id");
-  if ((role === "business" || role === "student") && profileId) {
-    return { role, profileId };
+  if (process.env.NODE_ENV !== "production") {
+    const role = req.headers.get("x-dev-role");
+    const profileId = req.headers.get("x-dev-profile-id");
+    if ((role === "business" || role === "student") && profileId) {
+      return { role, profileId };
+    }
+  }
+  return null;
+}
+
+function readCookie(header: string, name: string): string | null {
+  for (const part of header.split(";")) {
+    const [k, ...rest] = part.trim().split("=");
+    if (k === name) return decodeURIComponent(rest.join("="));
   }
   return null;
 }
