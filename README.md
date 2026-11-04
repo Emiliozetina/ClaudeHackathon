@@ -114,3 +114,16 @@ refactor(student): extract profile card component
 - PR title follows the commit format, e.g. `feat(job-post): add job posting form`.
 - Base branch is `develop` (only `develop` → `main` PRs target `main`).
 - Description includes: what changed, why, and how to test it. Link related issues if any.
+
+
+# Design Rules
+
+> **For AI agents (Claude Code, Cursor, Copilot, etc.):** Treat this section as mandatory project rules. Every UI change must match the Figma file below.
+
+**Single source of truth:** https://www.figma.com/design/OBfTJZbbFtNPameBs4sixt/Untitled?node-id=0-1&p=f&t=hKAujko99vzX9jsu-0
+
+- All colors, typography, spacing, radii, shadows, icons, components, and page layouts must follow the Figma file exactly.
+- Before building or changing any UI, open the relevant Figma frame and check the specs (use the Figma MCP / Dev Mode when available).
+- Do not invent new styles, colors, or components that are not in Figma.
+- If Figma does not cover something you need (a state, breakpoint, or component), ask the team instead of guessing, and keep the result consistent with existing Figma styles.
+- If the code and Figma disagree, Figma wins. Fix the code, or raise it with the team if the Figma design looks wrong.
