@@ -1,5 +1,7 @@
 # ClaudeHackathon
-Northumbria Claude Hackathon project 
+Northumbria Claude Hackathon project  
+
+NextJS
 
 # Basic Idea
 When small businesses in the North East get overloaded, they can post a short-term task instead of hiring a full-time employee. Each post sets out the type of work, required experience, preferred experience and pay, and students can apply directly.
@@ -17,3 +19,5 @@ ex- Students need to be expert in JavaScript, Students must have used Excel
 4. Preferred experience(choice) - What kind of experiences that students work do company prefer
 
 5. Payment - How will be the payment be
+
+
