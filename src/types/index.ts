@@ -107,7 +107,19 @@ export interface Application {
   submittedAt: string;
 }
 
-export type EngagementStatus = "active" | "signed_off" | "paid" | "reviewed";
+/**
+ * active -> submitted (student marks the task complete)
+ *   -> paid (business pays and reviews) -> reviewed (student reviews back).
+ * The business can send a submitted engagement back to active with
+ * "request changes".
+ */
+export type EngagementStatus = "active" | "submitted" | "paid" | "reviewed";
+
+export interface Milestone {
+  id: ID;
+  title: string;
+  done: boolean;
+}
 
 /** The agreed piece of work once a student has been chosen. */
 export interface Engagement {
@@ -119,7 +131,13 @@ export interface Engagement {
   agreedEndDate: string;
   scope: string;
   status: EngagementStatus;
-  signedOffAt?: string;
+  milestones: Milestone[];
+  hoursLogged: number;
+  nextCheckIn?: string;
+  /** When the student marked the task complete. */
+  completedAt?: string;
+  /** Set when the business sends the work back; cleared on the next submit. */
+  changesRequested?: string;
   paidAt?: string;
 }
 
@@ -138,13 +156,19 @@ export interface Message {
   sentAt: string;
 }
 
-/** Both sides rate each other after sign-off; the student's becomes a reference. */
+/**
+ * Both sides rate each other once the work is paid. A business review of a
+ * student can be shown on their portfolio as a verified reference.
+ */
 export interface Review {
   id: ID;
   engagementId: ID;
   authorId: ID;
   subjectId: ID;
   rating: 1 | 2 | 3 | 4 | 5;
+  /** "What stood out" tags, e.g. Reliable, Creative. */
+  tags: string[];
   comment: string;
+  verifiedReference: boolean;
   createdAt: string;
 }

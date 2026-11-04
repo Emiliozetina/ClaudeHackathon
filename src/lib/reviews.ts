@@ -1,7 +1,7 @@
 import { displayName } from "@/lib/auth";
-import { getEngagementForUser } from "@/lib/engagements";
+import { getEngagementForUser, saveReview, type ReviewInput } from "@/lib/engagements";
 import { badRequest } from "@/lib/errors";
-import { newId, store } from "@/lib/store";
+import { store } from "@/lib/store";
 import type { Review, User } from "@/types";
 
 export interface ReviewView extends Review {
@@ -9,7 +9,9 @@ export interface ReviewView extends Review {
   subjectName: string;
 }
 
-const REVIEWABLE = new Set(["signed_off", "paid"]);
+/** Tags offered under "What stood out?", by who is being reviewed. */
+export const STUDENT_REVIEW_TAGS = ["Reliable", "Creative", "Great communicator", "Fast learner", "Went above and beyond"];
+export const BUSINESS_REVIEW_TAGS = ["Clear brief", "Quick feedback", "Friendly", "Paid on time", "Would work with again"];
 
 function toView(review: Review): ReviewView {
   return {
@@ -19,52 +21,28 @@ function toView(review: Review): ReviewView {
   };
 }
 
-/** Whether this user can still leave a review on this engagement. */
+/**
+ * Whether this user can still leave a review. The business reviews as part of
+ * paying (payAndReview); the student reviews the business once paid.
+ */
 export function canReview(engagementId: string, user: User): boolean {
   const view = getEngagementForUser(engagementId, user);
   return (
-    REVIEWABLE.has(view.status) &&
+    user.id === view.studentUserId &&
+    view.status === "paid" &&
     !store.reviews.some((r) => r.engagementId === engagementId && r.authorId === user.id)
   );
 }
 
-/**
- * Leave a review once the work is signed off. The subject is always the other
- * side. When both sides have reviewed, the engagement moves to "reviewed".
- */
-export function createReview(
-  engagementId: string,
-  user: User,
-  rating: number,
-  comment: string,
-): ReviewView {
+/** Student reviews the business after being paid. */
+export function createReview(engagementId: string, user: User, input: ReviewInput): ReviewView {
   const view = getEngagementForUser(engagementId, user);
-  if (!REVIEWABLE.has(view.status)) throw badRequest("Reviews open once the work is signed off.");
-  if (store.reviews.some((r) => r.engagementId === engagementId && r.authorId === user.id)) {
-    throw badRequest("You have already reviewed this engagement.");
+  if (user.id !== view.studentUserId) {
+    throw badRequest("Businesses review the student when they pay.");
   }
-  if (!Number.isInteger(rating) || rating < 1 || rating > 5) throw badRequest("Rating must be 1 to 5.");
-  const text = comment.trim();
-  if (!text) throw badRequest("Please add a short comment.");
-
-  const subjectId = user.id === view.businessUserId ? view.studentUserId : view.businessUserId;
-  const review: Review = {
-    id: newId("r"),
-    engagementId,
-    authorId: user.id,
-    subjectId,
-    rating: rating as Review["rating"],
-    comment: text,
-    createdAt: new Date().toISOString(),
-  };
-  store.reviews.push(review);
-
-  const authors = new Set(store.reviews.filter((r) => r.engagementId === engagementId).map((r) => r.authorId));
-  if (authors.has(view.businessUserId) && authors.has(view.studentUserId)) {
-    store.engagements.find((e) => e.id === engagementId)!.status = "reviewed";
-  }
-
-  return toView(review);
+  if (view.status !== "paid") throw badRequest("You can review once you've been paid.");
+  const engagement = store.engagements.find((e) => e.id === engagementId)!;
+  return toView(saveReview(engagement, user, input));
 }
 
 export function listReviewsForEngagement(engagementId: string): ReviewView[] {
@@ -74,4 +52,9 @@ export function listReviewsForEngagement(engagementId: string): ReviewView[] {
 /** Reviews about a user; for students these act as references on their profile. */
 export function listReviewsForSubject(subjectId: string): ReviewView[] {
   return store.reviews.filter((r) => r.subjectId === subjectId).map(toView);
+}
+
+/** Verified references shown on a student's portfolio. */
+export function listVerifiedReferences(studentUserId: string): ReviewView[] {
+  return listReviewsForSubject(studentUserId).filter((r) => r.verifiedReference);
 }
