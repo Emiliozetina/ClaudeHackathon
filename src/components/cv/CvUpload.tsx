@@ -1,9 +1,9 @@
 "use client";
 
 import { useRef, useState, type DragEvent } from "react";
-import { Button } from "@/components/ui";
+import { Button, Icon } from "@/components/ui";
 import { formatSize } from "@/lib/cv/format";
-import { IconFile, IconUpload } from "./CvIcons";
+import { IconUpload } from "./CvIcons";
 
 export type UploadState =
   | { status: "idle" }
@@ -50,8 +50,8 @@ export function CvUpload({ state, onFile }: { state: UploadState; onFile: (file:
     return (
       <div className="flex items-center gap-4 rounded-md border border-border-default bg-surface-page p-[15px]">
         {input}
-        <span className="flex size-10 shrink-0 items-center justify-center rounded-md bg-teal-50 text-teal-700">
-          <IconFile className="size-5" />
+        <span className="flex size-10 shrink-0 items-center justify-center rounded-md bg-teal-50">
+          <Icon name="file-0e7c7b-20" />
         </span>
         <div className="flex min-w-0 flex-1 flex-col">
           <span className="type-label truncate text-text-primary">{state.fileName}</span>

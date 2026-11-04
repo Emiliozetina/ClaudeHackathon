@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Chip } from "@/components/ui";
-import { IconPlus, IconX } from "./CvIcons";
+import { Chip, Icon } from "@/components/ui";
 
 const MAX_SKILLS = 30;
 
@@ -43,7 +42,7 @@ export function SkillsEditor({
                 onClick={() => onChange(skills.filter((s) => s !== skill))}
                 className="-mr-1 rounded-pill p-0.5 hover:bg-teal-100 focus-visible:outline-2 focus-visible:outline-teal-700"
               >
-                <IconX className="size-3" />
+                <Icon name="x-0b2545-12" />
               </button>
             </Chip>
           </li>
@@ -75,7 +74,7 @@ export function SkillsEditor({
               onClick={() => setAdding(true)}
               className="type-label-sm inline-flex items-center gap-1 rounded-pill border border-dashed border-border-default px-2.5 py-1.5 text-text-secondary hover:border-teal-700 focus-visible:outline-2 focus-visible:outline-teal-700"
             >
-              <IconPlus className="size-3.5" />
+              <Icon name="plus-5b6472-14" />
               Add skill
             </button>
           )}

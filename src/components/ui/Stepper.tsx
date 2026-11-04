@@ -26,7 +26,8 @@ export function Stepper({ current, steps = ["Account", "Details", "Profile"], cl
               <li
                 aria-hidden
                 className={cn(
-                  "h-[2px] w-[48px] shrink-0 rounded-[1px]",
+                  // Connectors shrink (down to 12px) so the stepper fits a phone screen.
+                  "h-[2px] w-[48px] min-w-[12px] shrink rounded-[1px]",
                   step <= current ? "bg-teal-700" : "bg-border-default",
                 )}
               />
