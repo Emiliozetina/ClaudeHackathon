@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { Suspense } from "react";
+import { RoleGate } from "@/components/demo/RoleGate";
 import { AppHeader, Icon } from "@/components/ui";
 import { TaskForm } from "@/components/tasks/TaskForm";
 
@@ -24,7 +26,11 @@ export default function NewTaskPage() {
           </div>
           <p className="type-caption text-text-secondary">Draft saved 2 min ago</p>
         </div>
-        <TaskForm />
+        <Suspense fallback={<p className="type-body-sm text-text-secondary">Loading…</p>}>
+          <RoleGate role="business">
+            <TaskForm />
+          </RoleGate>
+        </Suspense>
       </main>
     </>
   );

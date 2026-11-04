@@ -4,7 +4,6 @@ import { useMemo, useState, type KeyboardEvent, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Chip, Field, Icon, Input, Select, TaskCard, fieldClassName } from "@/components/ui";
 import { cn } from "@/lib/cn";
-import { DEV_BUSINESS_HEADERS } from "@/lib/dev-actor";
 
 // Figma: Screens → "07 · Post a task" (9:464). Defaults are the Claude draft shown in Figma
 // until "07a · Describe it" passes a real draft in.
@@ -182,12 +181,16 @@ export function TaskForm({ initial = FIGMA_DRAFT, businessName = "Tyne Brew Caf�
     setErrors([]);
     const res = await fetch("/api/tasks", {
       method: "POST",
-      headers: { "content-type": "application/json", ...DEV_BUSINESS_HEADERS },
+      headers: { "content-type": "application/json" },
       body: JSON.stringify(payload),
     });
     setBusy(false);
     if (res.ok) {
-      router.push("/dashboard/business/tasks");
+      // The business task list is still a stub (#17); the applicants page is
+      // the owner's real view of a new task.
+      const body = await res.json().catch(() => null);
+      const taskId: unknown = body?.data?.id;
+      router.push(typeof taskId === "string" ? `/dashboard/business/tasks/${taskId}/applicants` : "/tasks");
       return;
     }
     const body = await res.json().catch(() => null);

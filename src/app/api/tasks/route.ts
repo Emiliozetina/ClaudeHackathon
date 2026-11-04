@@ -51,7 +51,7 @@ export async function POST(req: Request) {
   const body = await readJson(req);
   if (!body) return fail(400, "Body must be a JSON object");
 
-  const parsed = parseTaskInput(body);
+  const parsed = parseTaskInput(body, { requireFutureStart: true });
   if (!parsed.value) return fail(400, "Invalid task", parsed.errors);
 
   const status: TaskStatus = body.status === "draft" ? "draft" : "open";

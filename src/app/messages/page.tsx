@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 
-import { DemoUserSwitcher } from "@/components/engagements/DemoUserSwitcher";
 import { AutoRefresh } from "@/components/messaging/AutoRefresh";
 import { ThreadSidebar } from "@/components/messaging/ThreadSidebar";
 import { toThreadListItems } from "@/components/messaging/toThreadListItems";
@@ -10,9 +9,6 @@ import { listThreadsForUser } from "@/lib/messages";
 export default function MessagesPage() {
   return (
     <section className="mx-auto w-full max-w-6xl px-6 py-10">
-      <Suspense fallback={null}>
-        <DemoUserSwitcher />
-      </Suspense>
       <h1 className="sr-only">Messages</h1>
       <Suspense fallback={<p className="mt-6 text-sm text-black/60 dark:text-white/60">Loading conversations…</p>}>
         <Inbox />
