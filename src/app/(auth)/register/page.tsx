@@ -63,7 +63,7 @@ function RoleCard({ href, title, description, bullets, icon }: RoleCardProps) {
 export default function RegisterPage() {
   return (
     <section className="flex flex-col items-center gap-10">
-      <div className="text-center">
+      <div className="w-full text-center">
         <Stepper current={1} className="justify-center" />
         <h1 className="type-h1 mt-6 text-text-primary">How will you use NEXA?</h1>
         <p className="type-body mx-auto mt-3 max-w-xl text-text-secondary">

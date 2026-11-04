@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { AppHeader, Avatar, Button, Chip, Icon, StatCard } from "@/components/ui";
+import { Avatar, Button, Chip, Icon, StatCard } from "@/components/ui";
 import type { AvatarTone, ChipType } from "@/components/ui";
+import { CurrentUserHeader } from "@/components/layout/CurrentUserHeader";
 
 // Figma: Screens → "06 · Business dashboard" (9:271).
 // Demo content mirrors the Figma screen until the dashboard API exists.
@@ -71,10 +72,7 @@ const card = "rounded-lg border border-border-subtle bg-surface-card";
 export default function BusinessDashboardPage() {
   return (
     <>
-      <AppHeader
-        role="business"
-        account={{ name: "Tyne Brew Café", subtitle: "Business account", initials: "TB" }}
-      />
+      <CurrentUserHeader />
       <main className="flex w-full flex-col gap-[32px] px-6 pb-[80px] pt-[40px] lg:px-[120px]">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex flex-col gap-[6px]">
@@ -103,7 +101,8 @@ export default function BusinessDashboardPage() {
                 View all
               </Button>
             </div>
-            <div className="overflow-x-auto">
+            {/* relative: keeps the sr-only labels (absolute) inside the scroll box. */}
+            <div className="relative overflow-x-auto">
               <table className="w-full min-w-[640px] text-left">
                 <thead className="bg-navy-50">
                   <tr className="type-overline text-text-secondary">

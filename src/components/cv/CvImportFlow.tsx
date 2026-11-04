@@ -1,12 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { Button, Stepper } from "@/components/ui";
+import { Button, Icon, Stepper } from "@/components/ui";
 import { saveStudentDetails } from "@/app/cv/actions";
 import { buildInitialDetails, type InitialDetails } from "@/lib/cv/prefill";
 import { CV_MAX_BYTES, type CvParseResult, type StudentDetails } from "@/lib/cv/types";
 import { CvFindings } from "./CvFindings";
-import { IconShield } from "./CvIcons";
 import { CvShell, type CvPanel } from "./CvShell";
 import { CvUpload, type UploadState } from "./CvUpload";
 import { StudentDetailsForm } from "./StudentDetailsForm";
@@ -93,7 +92,7 @@ export function CvImportFlow({ profile, email, emailVerified }: Props) {
             <>
               <CvFindings result={result} />
               <p className="type-caption flex items-start gap-2 text-text-secondary">
-                <IconShield className="mt-0.5 size-4 shrink-0" />
+                <Icon name="shield-5b6472-16" className="mt-[9px] shrink-0" />
                 Claude only uses what’s written in your CV. If something looks wrong, you can change it on the next
                 screen.
               </p>

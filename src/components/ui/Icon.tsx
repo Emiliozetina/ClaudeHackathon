@@ -102,6 +102,11 @@ const icons = {
   "edit-5b6472-18": 18,
   "image-0b2545-22": 22,
   "trash-5b6472-18": 18,
+  // CV flow (04a / 04 / 04b).
+  "lock-white-20": 20,
+  "file-0e7c7b-20": 20,
+  "plus-0e7c7b-18": 18,
+  "plus-5b6472-14": 14,
 } as const;
 
 export type IconName = keyof typeof icons;

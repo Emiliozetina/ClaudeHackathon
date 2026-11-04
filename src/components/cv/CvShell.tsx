@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
-import { Avatar, Logo } from "@/components/ui";
-import { IconCheck, IconLock } from "./CvIcons";
+import { Avatar, Icon, Logo } from "@/components/ui";
 
 /**
  * Split-screen layout from the NEXA student sign-up frames: teal brand panel
@@ -59,7 +58,7 @@ const PANELS: Record<CvPanel, PanelContent> = {
 export function CvShell({ panel, children }: { panel: CvPanel; children: ReactNode }) {
   const content = PANELS[panel];
   return (
-    <div className="grid min-h-screen flex-1 lg:grid-cols-[560px_1fr]">
+    <div className="grid min-h-screen flex-1 grid-cols-1 lg:grid-cols-[560px_1fr]">
       <aside className="hidden flex-col justify-between bg-teal-800 p-14 lg:flex">
         <Logo theme="dark" className="self-start" />
 
@@ -68,8 +67,8 @@ export function CvShell({ panel, children }: { panel: CvPanel; children: ReactNo
           <ul className="flex flex-col gap-4">
             {content.bullets.map((bullet) => (
               <li key={bullet} className="type-body flex items-center gap-3 text-text-inverse">
-                <span className="flex size-6 shrink-0 items-center justify-center rounded-pill bg-amber-500 text-text-inverse">
-                  <IconCheck className="size-3.5" />
+                <span className="flex size-6 shrink-0 items-center justify-center rounded-pill bg-amber-500">
+                  <Icon name="check-633806-14" />
                 </span>
                 {bullet}
               </li>
@@ -79,7 +78,7 @@ export function CvShell({ panel, children }: { panel: CvPanel; children: ReactNo
 
         {content.privacyNote && (
           <div className="flex items-center gap-3 rounded-lg bg-teal-700 p-5">
-            <IconLock className="size-5 shrink-0 text-text-inverse" />
+            <Icon name="lock-white-20" className="shrink-0" />
             <p className="type-body-sm text-text-inverse">{content.privacyNote}</p>
           </div>
         )}
@@ -97,7 +96,7 @@ export function CvShell({ panel, children }: { panel: CvPanel; children: ReactNo
         )}
       </aside>
 
-      <main className="flex bg-surface-card">
+      <main className="flex min-w-0 bg-surface-card">
         <div className="mx-auto my-auto flex w-full max-w-[568px] flex-col px-6 py-12">{children}</div>
       </main>
     </div>

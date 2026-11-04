@@ -1,13 +1,14 @@
 import { Suspense } from "react";
 import { RoleGate } from "@/components/demo/RoleGate";
-import { AppHeader, Icon } from "@/components/ui";
+import { Icon } from "@/components/ui";
 import { TaskBuilder } from "@/components/tasks/TaskBuilder";
+import { CurrentUserHeader } from "@/components/layout/CurrentUserHeader";
 
 // Figma: Screens → "07a · Post a task — describe it, Claude drafts it" (29:1403).
 export default function DescribeTaskPage() {
   return (
     <>
-      <AppHeader role="business" account={{ name: "Tyne Brew Café", subtitle: "Business account", initials: "TB" }} />
+      <CurrentUserHeader />
       <main className="flex w-full flex-col gap-[28px] px-6 pb-[80px] pt-[40px] lg:px-[120px]">
         <div className="flex flex-col gap-[6px]">
           <div className="flex flex-wrap items-center gap-[12px]">

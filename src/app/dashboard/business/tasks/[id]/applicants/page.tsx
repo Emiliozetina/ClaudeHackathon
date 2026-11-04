@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { connection } from "next/server";
 import { ApplicantActions } from "@/components/applications/ApplicantActions";
-import { AppHeader, Avatar, Chip, Icon } from "@/components/ui";
+import { Avatar, Chip, Icon } from "@/components/ui";
 import type { AvatarTone, ChipType } from "@/components/ui";
 import { applicationsForTask, forBusiness, type ApplicationForBusiness } from "@/lib/applications";
 import { RoleGate } from "@/components/demo/RoleGate";
@@ -11,6 +11,7 @@ import { requireUser } from "@/lib/auth";
 import { cn } from "@/lib/cn";
 import { db } from "@/lib/db";
 import { mentions } from "@/lib/shortlist";
+import { CurrentUserHeader } from "@/components/layout/CurrentUserHeader";
 
 // Figma: Screens → "08 · Review applicants" (9:722).
 // Names stay hidden until a student is chosen (see forBusiness), so others show as "Candidate A, B…".
@@ -237,7 +238,7 @@ async function Applicants({ params, searchParams }: { params: Promise<{ id: stri
 export default function ApplicantsPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Search }) {
   return (
     <>
-      <AppHeader role="business" account={{ name: "Tyne Brew Café", subtitle: "Business account", initials: "TB" }} />
+      <CurrentUserHeader />
       <main className="flex w-full flex-col gap-[32px] px-6 pb-[80px] pt-[40px] lg:px-[120px]">
         <Link href="/dashboard/business/tasks" className="type-label flex w-fit items-center gap-[6px] text-teal-700">
           <Icon name="arrow-left-0e7c7b-16" />
