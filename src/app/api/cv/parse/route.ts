@@ -1,5 +1,5 @@
 import { fail, ok } from "@/lib/http";
-import { parseCv } from "@/lib/cv/parse";
+import { CvParseError, parseCv } from "@/lib/cv/parse";
 import { CV_MAX_BYTES } from "@/lib/cv/types";
 import { validateCvUpload } from "@/lib/cv/validate";
 import { getActor } from "@/lib/session";
@@ -9,7 +9,8 @@ import { getActor } from "@/lib/session";
  * Students only. Returns what was found in the CV; nothing is saved here and
  * the file itself is never stored.
  *
- * NOTE: parseCv is currently a mock (see src/lib/cv/parse.ts).
+ * Claude reads the PDF (src/lib/cv/parse.ts). Errors: 500 when reading CVs
+ * isn't configured, 502 when Claude fails or refuses.
  */
 export async function POST(req: Request) {
   const actor = getActor(req);
@@ -36,6 +37,11 @@ export async function POST(req: Request) {
   const problem = validateCvUpload(file, bytes);
   if (problem) return fail(400, problem);
 
-  const result = await parseCv({ name: file.name, type: file.type, size: file.size, bytes });
-  return ok(result);
+  try {
+    const result = await parseCv({ name: file.name, type: file.type, size: file.size, bytes });
+    return ok(result);
+  } catch (error) {
+    if (error instanceof CvParseError) return fail(error.status, error.message);
+    throw error;
+  }
 }

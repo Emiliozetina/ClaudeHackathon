@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
 import type { CvField, CvParseResult } from "@/lib/cv/types";
-import { IconAlert, IconCheck, IconSpark } from "./CvIcons";
+import { Icon } from "@/components/ui";
 
 interface Row {
   key: string;
@@ -72,14 +72,14 @@ export function CvFindings({ result }: { result: CvParseResult }): ReactNode {
   return (
     <section
       aria-labelledby="cv-findings-title"
-      className="flex flex-col gap-4 rounded-lg border-2 border-teal-700 bg-surface-card p-[22px]"
+      className="flex flex-col gap-[14px] rounded-lg border-2 border-teal-700 bg-surface-card p-[22px]"
     >
       <div className="flex items-center justify-between gap-3">
         <h3 id="cv-findings-title" className="type-h4 text-text-primary">
           Here’s what Claude found
         </h3>
         <span className="type-label-sm inline-flex items-center gap-1.5 whitespace-nowrap rounded-pill bg-navy-900 px-2.5 py-1.5 text-text-inverse">
-          <IconSpark className="size-3.5 text-amber-500" />
+          <Icon name="spark-f2a541-14" />
           Read by Claude
         </span>
       </div>
@@ -97,11 +97,11 @@ export function CvFindings({ result }: { result: CvParseResult }): ReactNode {
             <li key={row.key} className="flex items-start gap-2.5">
               <span
                 className={cn(
-                  "mt-2 flex size-[22px] shrink-0 items-center justify-center rounded-pill",
-                  found ? "bg-status-success-bg text-status-success" : "bg-status-warning-bg text-status-warning",
+                  "mt-[8.5px] flex size-[22px] shrink-0 items-center justify-center rounded-pill",
+                  found ? "bg-status-success-bg" : "bg-status-warning-bg",
                 )}
               >
-                {found ? <IconCheck className="size-3" /> : <IconAlert className="size-3" />}
+                <Icon name={found ? "check-16774a-12" : "alert-8a5300-12"} />
               </span>
               <div className="flex min-w-0 flex-col">
                 <p className="type-label text-text-primary">

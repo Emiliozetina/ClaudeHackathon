@@ -29,7 +29,8 @@ export default function LoginPage() {
       return;
     }
     const role = data.data?.user?.role;
-    router.push(role === "business" ? "/dashboard/business" : "/dashboard/student");
+    // Students land on the task feed (Figma 09); there is no student dashboard screen.
+    router.push(role === "business" ? "/dashboard/business" : "/tasks");
     router.refresh();
   }
 

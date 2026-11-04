@@ -12,7 +12,7 @@ import { DomainError } from "@/lib/errors";
 import { getThreadForUser, listThreadsForUser, type ThreadDetail } from "@/lib/messages";
 import type { EngagementStatus } from "@/types";
 
-import { AccountHeader } from "../_components/AccountHeader";
+import { CurrentUserHeader } from "@/components/layout/CurrentUserHeader";
 import { MessageForm } from "../_components/MessageForm";
 import { MessageList } from "../_components/MessageList";
 import { ThreadSidebar } from "../_components/ThreadSidebar";
@@ -31,9 +31,7 @@ const inboxClass = "mt-[16px] grid overflow-hidden rounded-lg border border-bord
 export default function MessageThreadPage({ params }: PageProps<"/messages/[threadId]">) {
   return (
     <>
-      <Suspense fallback={<div className="h-[72px] border-b border-border-subtle bg-surface-card" />}>
-        <AccountHeader />
-      </Suspense>
+      <CurrentUserHeader />
       <main className="mx-auto w-full max-w-[1240px] px-[20px] pt-[32px] pb-[40px]">
         <h1 className="sr-only">Conversation</h1>
         <Suspense fallback={<p className="type-body-sm mt-[16px] text-text-secondary">Loading conversation…</p>}>

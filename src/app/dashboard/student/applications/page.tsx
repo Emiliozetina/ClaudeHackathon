@@ -237,7 +237,7 @@ function Progress({ done }: { done: number }) {
   // Figma: a fully chosen application uses success green; in-progress ones use teal.
   const fill = done === STEPS.length ? "bg-status-success" : "bg-teal-700";
   return (
-    <ol className="flex items-center gap-[8px]" aria-label="Application progress">
+    <ol className="relative flex min-w-0 items-center gap-[8px]" aria-label="Application progress">
       {STEPS.map((step, i) => {
         const isDone = i < done;
         return (
@@ -258,7 +258,7 @@ function Progress({ done }: { done: number }) {
             </span>
             <span
               className={cn(
-                "type-label-sm whitespace-nowrap",
+                "type-label-sm whitespace-nowrap max-sm:sr-only",
                 isDone ? "text-text-primary" : "text-text-muted",
               )}
             >
