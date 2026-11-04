@@ -57,7 +57,8 @@ export async function PATCH(req: Request, { params }: Ctx) {
     const businessUserId = db.businesses.find((b) => b.id === task.businessId)?.userId;
     const user = db.users.find((u) => u.id === businessUserId);
     try {
-      createEngagementFromApplication(app.id, user);
+      const engagement = createEngagementFromApplication(app.id, user);
+      return ok({ ...forBusiness(app), engagementId: engagement.id });
     } catch (error) {
       if (error instanceof DomainError) return fail(DOMAIN_STATUS[error.code], error.message);
       throw error;
