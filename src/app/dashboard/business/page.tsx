@@ -83,7 +83,7 @@ export default function BusinessDashboardPage() {
               Wednesday 4 November · Here’s what’s happening with your tasks.
             </p>
           </div>
-          <Button href="/tasks/new" size="lg" showArrow>
+          <Button href="/tasks/new/describe" size="lg" showArrow>
             Post a new task
           </Button>
         </div>

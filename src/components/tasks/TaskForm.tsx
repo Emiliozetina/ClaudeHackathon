@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, type KeyboardEvent, type ReactNode } from "react";
+import { useEffect, useMemo, useState, type KeyboardEvent, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Chip, Field, Icon, Input, Select, TaskCard, fieldClassName } from "@/components/ui";
 import { cn } from "@/lib/cn";
@@ -29,6 +29,41 @@ export type TaskDraft = {
   locationType: LocationType;
   address: string;
 };
+
+/** sessionStorage key used by "07a" (TaskBuilder) to hand its draft to this form. */
+export const DRAFT_STORAGE_KEY = "nexa:task-draft";
+
+type HandoffDraft = {
+  title: string;
+  contents: string;
+  weeks: number;
+  hoursPerWeek: number;
+  requirements: string[];
+  preferred: string[];
+  payType: PayType;
+  amount: number;
+};
+
+function readHandoff(): Partial<TaskDraft> | null {
+  try {
+    const raw = sessionStorage.getItem(DRAFT_STORAGE_KEY);
+    if (!raw) return null;
+    sessionStorage.removeItem(DRAFT_STORAGE_KEY);
+    const d = JSON.parse(raw) as HandoffDraft;
+    return {
+      title: d.title,
+      description: d.contents,
+      weeks: d.weeks,
+      hoursPerWeek: d.hoursPerWeek,
+      requirements: d.requirements,
+      preferred: d.preferred,
+      payType: d.payType,
+      amount: d.amount,
+    };
+  } catch {
+    return null;
+  }
+}
 
 const FIGMA_DRAFT: TaskDraft = {
   title: "Social media assistant",
@@ -146,6 +181,13 @@ export function TaskForm({ initial = FIGMA_DRAFT, businessName = "Tyne Brew Caf√
   const [errors, setErrors] = useState<string[]>([]);
   const [busy, setBusy] = useState(false);
   const set = <K extends keyof TaskDraft>(k: K, v: TaskDraft[K]) => setT((p) => ({ ...p, [k]: v }));
+
+  // Pick up a draft handed over from "07a ¬∑ Describe it" once, after mount.
+  useEffect(() => {
+    const handoff = readHandoff();
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time read of browser storage
+    if (handoff) setT((p) => ({ ...p, ...handoff }));
+  }, []);
 
   const pay = useMemo(() => {
     const totalHours = t.weeks * t.hoursPerWeek;
