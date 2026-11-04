@@ -95,12 +95,16 @@ const icons = {
   "user-white-20": 20,
   "users-f2a541-22": 22,
   "x-5b6472-12": 12,
-  // CV flow (04a / 04 / 04b).
+  // Screens 02–05 (sign-up / sign-in).
+  "check-0e7c7b-16": 16,
   "check-633806-14": 14,
+  "check-white-14": 14,
+  "edit-5b6472-18": 18,
+  "image-0b2545-22": 22,
+  "trash-5b6472-18": 18,
+  // CV flow (04a / 04 / 04b).
   "lock-white-20": 20,
   "file-0e7c7b-20": 20,
-  "edit-5b6472-18": 18,
-  "trash-5b6472-18": 18,
   "plus-0e7c7b-18": 18,
   "plus-5b6472-14": 14,
 } as const;
