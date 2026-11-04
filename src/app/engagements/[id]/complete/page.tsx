@@ -6,7 +6,7 @@ import { formatDate, formatGBP, STATUS_LABELS } from "@/components/engagements/f
 import { loadEngagement } from "@/components/engagements/load";
 import { NoAccess } from "@/components/engagements/NoAccess";
 import { ReviewList } from "@/components/reviews/ReviewList";
-import { Chip, Icon } from "@/components/ui";
+import { buttonClassName, Chip, Icon } from "@/components/ui";
 import type { EngagementView } from "@/lib/engagements";
 import { BUSINESS_REVIEW_TAGS, canReview, listReviewsForEngagement, STUDENT_REVIEW_TAGS } from "@/lib/reviews";
 import type { User } from "@/types";
@@ -123,6 +123,9 @@ function StudentWaiting({ engagement: e }: { engagement: EngagementView }) {
   );
 }
 
+const primaryButtonClass = buttonClassName({ variant: "primary" });
+const secondaryButtonClass = buttonClassName({ variant: "secondary" });
+
 function BusinessCheck({ engagement: e }: { engagement: EngagementView }) {
   const delivered = e.milestones.filter((m) => m.done);
 
@@ -175,6 +178,22 @@ function BusinessCheck({ engagement: e }: { engagement: EngagementView }) {
             partyName={e.studentName}
             partyDetail={dates(e)}
           />
+          {/* Figma 13: "Work with … again?" rehire card. */}
+          <section className="flex flex-col gap-[14px] rounded-lg bg-navy-900 p-[24px]">
+            <span className="flex size-[40px] items-center justify-center rounded-[10px] bg-navy-700">
+              <Icon name="users-f2a541-22" />
+            </span>
+            <h2 className="type-h4 text-text-inverse">Work with {e.studentName.split(" ")[0]} again?</h2>
+            <p className="type-body-sm text-navy-100">
+              Invite them straight to your next task or save them to your local talent pool.
+            </p>
+            <Link href="/tasks/new/describe" className={`${primaryButtonClass} w-full`}>
+              Invite to a new task
+            </Link>
+            <Link href="/dashboard/business/talent-pool" className={`${secondaryButtonClass} w-full`}>
+              Save to talent pool
+            </Link>
+          </section>
         </aside>
       </div>
     </div>
