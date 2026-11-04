@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Errors, Field, TextArea, TextInput } from "@/components/forms/Field";
+import { Button, Errors, Field, TextArea, TextInput } from "@/components/forms/Field";
 import type { Business } from "@/types";
 
 export function BusinessProfileForm({ initial }: { initial: Business }) {
@@ -36,7 +36,7 @@ export function BusinessProfileForm({ initial }: { initial: Business }) {
       <Field label="Company name" htmlFor="name">
         <TextInput id="name" value={name} onChange={(e) => setName(e.target.value)} required />
       </Field>
-      <Field label="About us" htmlFor="about">
+      <Field label="About us" htmlFor="about" hint="Students see this when they browse your tasks.">
         <TextArea
           id="about"
           value={about}
@@ -44,31 +44,35 @@ export function BusinessProfileForm({ initial }: { initial: Business }) {
           required
         />
       </Field>
-      <Field label="Location" htmlFor="location">
-        <TextInput
-          id="location"
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-          required
-        />
-      </Field>
-      <Field label="Website (optional)" htmlFor="website">
-        <TextInput
-          id="website"
-          value={website}
-          onChange={(e) => setWebsite(e.target.value)}
-        />
-      </Field>
-      <div className="flex items-center gap-3">
-        <button
-          type="submit"
-          disabled={status === "saving"}
-          className="rounded-md bg-black px-4 py-2 text-sm font-medium text-white disabled:opacity-60 dark:bg-white dark:text-black"
-        >
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Field label="Location" htmlFor="location">
+          <TextInput
+            id="location"
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            required
+          />
+        </Field>
+        <Field label="Website (optional)" htmlFor="website">
+          <TextInput
+            id="website"
+            value={website}
+            onChange={(e) => setWebsite(e.target.value)}
+            placeholder="https://"
+          />
+        </Field>
+      </div>
+      <div className="flex items-center gap-3 pt-2">
+        <Button type="submit" disabled={status === "saving"}>
           {status === "saving" ? "Saving…" : "Save profile"}
-        </button>
+        </Button>
         {status === "saved" ? (
-          <span className="text-sm text-green-700 dark:text-green-300">Saved.</span>
+          <span className="inline-flex items-center gap-1 text-sm text-[color:var(--color-brand-hover)]">
+            <svg viewBox="0 0 20 20" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2.4">
+              <path d="M4 10l4 4 8-9" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            Saved
+          </span>
         ) : null}
       </div>
     </form>

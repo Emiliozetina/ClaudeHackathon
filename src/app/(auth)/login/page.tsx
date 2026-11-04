@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Errors, Field, TextInput } from "@/components/forms/Field";
+import { AuthCard } from "@/components/brand/AuthCard";
+import { Button, Errors, Field, TextInput } from "@/components/forms/Field";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -33,13 +34,22 @@ export default function LoginPage() {
   }
 
   return (
-    <section className="flex flex-col gap-6">
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Log in</h1>
-        <p className="mt-2 text-sm text-black/60 dark:text-white/60">
-          Businesses and students sign in here.
-        </p>
-      </div>
+    <AuthCard
+      title="Welcome back"
+      subtitle="Businesses and students sign in with the email they registered with."
+      footer={
+        <>
+          Don&apos;t have an account?{" "}
+          <Link
+            href="/register"
+            className="font-medium text-[color:var(--color-brand)] hover:text-[color:var(--color-brand-hover)]"
+          >
+            Create one
+          </Link>
+          .
+        </>
+      }
+    >
       <form onSubmit={onSubmit} className="flex flex-col gap-4">
         <Errors errors={errors} />
         <Field label="Email" htmlFor="email">
@@ -62,21 +72,10 @@ export default function LoginPage() {
             required
           />
         </Field>
-        <button
-          type="submit"
-          disabled={submitting}
-          className="rounded-md bg-black px-4 py-2 text-sm font-medium text-white disabled:opacity-60 dark:bg-white dark:text-black"
-        >
+        <Button type="submit" disabled={submitting} block>
           {submitting ? "Signing in…" : "Sign in"}
-        </button>
+        </Button>
       </form>
-      <p className="text-sm text-black/60 dark:text-white/60">
-        Don&apos;t have an account?{" "}
-        <Link href="/register" className="underline">
-          Create one
-        </Link>
-        .
-      </p>
-    </section>
+    </AuthCard>
   );
 }

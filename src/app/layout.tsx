@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "North East Tasks",
+  title: "NEXA — Real work. Right here.",
   description:
     "Short-term tasks from North East businesses, real experience for students.",
 };

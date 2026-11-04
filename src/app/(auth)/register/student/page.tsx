@@ -1,8 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Errors, Field, TextArea, TextInput } from "@/components/forms/Field";
+import { AuthCard } from "@/components/brand/AuthCard";
+import { Button, Errors, Field, TextArea, TextInput } from "@/components/forms/Field";
 
 export default function RegisterStudentPage() {
   const router = useRouter();
@@ -53,55 +55,69 @@ export default function RegisterStudentPage() {
   }
 
   return (
-    <section className="flex flex-col gap-6">
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Sign up as a student</h1>
-        <p className="mt-2 text-sm text-black/60 dark:text-white/60">
-          Use your university email (.ac.uk) so we can verify you as a student.
-        </p>
-      </div>
+    <AuthCard
+      eyebrow="Step 2 of 3 · Student"
+      title="Build your student profile"
+      subtitle="Use your university email ending in .ac.uk so we can verify you as a student."
+      footer={
+        <>
+          Already registered?{" "}
+          <Link
+            href="/login"
+            className="font-medium text-[color:var(--color-brand)] hover:text-[color:var(--color-brand-hover)]"
+          >
+            Sign in
+          </Link>
+          .
+        </>
+      }
+    >
       <form onSubmit={onSubmit} className="flex flex-col gap-4">
         <Errors errors={errors} />
-        <Field label="University email" htmlFor="email" hint="Must end in .ac.uk">
-          <TextInput
-            id="email"
-            type="email"
-            autoComplete="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </Field>
-        <Field label="Password" htmlFor="password" hint="At least 8 characters.">
-          <TextInput
-            id="password"
-            type="password"
-            autoComplete="new-password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </Field>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Field label="University email" htmlFor="email" hint="Must end in .ac.uk">
+            <TextInput
+              id="email"
+              type="email"
+              autoComplete="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </Field>
+          <Field label="Password" htmlFor="password" hint="At least 8 characters.">
+            <TextInput
+              id="password"
+              type="password"
+              autoComplete="new-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </Field>
+        </div>
         <Field label="Full name" htmlFor="name">
           <TextInput id="name" value={name} onChange={(e) => setName(e.target.value)} required />
         </Field>
-        <Field label="University" htmlFor="university">
-          <TextInput
-            id="university"
-            value={university}
-            onChange={(e) => setUniversity(e.target.value)}
-            required
-          />
-        </Field>
-        <Field label="Field of study" htmlFor="fieldOfStudy">
-          <TextInput
-            id="fieldOfStudy"
-            value={fieldOfStudy}
-            onChange={(e) => setFieldOfStudy(e.target.value)}
-            required
-          />
-        </Field>
-        <Field label="Skills" htmlFor="skills" hint="Comma-separated, e.g. JavaScript, Excel">
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Field label="University" htmlFor="university">
+            <TextInput
+              id="university"
+              value={university}
+              onChange={(e) => setUniversity(e.target.value)}
+              required
+            />
+          </Field>
+          <Field label="Field of study" htmlFor="fieldOfStudy">
+            <TextInput
+              id="fieldOfStudy"
+              value={fieldOfStudy}
+              onChange={(e) => setFieldOfStudy(e.target.value)}
+              required
+            />
+          </Field>
+        </div>
+        <Field label="Skills" htmlFor="skills" hint="Comma-separated, e.g. Canva, Instagram, Copywriting">
           <TextInput
             id="skills"
             value={skills}
@@ -109,9 +125,9 @@ export default function RegisterStudentPage() {
           />
         </Field>
         <Field
-          label="Motivations"
+          label="What motivates you?"
           htmlFor="motivations"
-          hint="Why are you looking for work experience?"
+          hint="Why are you looking for short-term work?"
         >
           <TextArea
             id="motivations"
@@ -120,7 +136,7 @@ export default function RegisterStudentPage() {
             required
           />
         </Field>
-        <Field label="Goals" htmlFor="goals" hint="What do you want to get out of this?">
+        <Field label="What are your goals?" htmlFor="goals" hint="What do you want to get out of NEXA?">
           <TextArea
             id="goals"
             value={goals}
@@ -128,14 +144,10 @@ export default function RegisterStudentPage() {
             required
           />
         </Field>
-        <button
-          type="submit"
-          disabled={submitting}
-          className="rounded-md bg-black px-4 py-2 text-sm font-medium text-white disabled:opacity-60 dark:bg-white dark:text-black"
-        >
-          {submitting ? "Creating…" : "Create student account"}
-        </button>
+        <Button type="submit" disabled={submitting} block>
+          {submitting ? "Creating account…" : "Create student account"}
+        </Button>
       </form>
-    </section>
+    </AuthCard>
   );
 }

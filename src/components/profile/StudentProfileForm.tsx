@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Errors, Field, TextArea, TextInput } from "@/components/forms/Field";
+import { Button, Errors, Field, TextArea, TextInput } from "@/components/forms/Field";
 import type { Student, WorkHistoryItem } from "@/types";
 
 interface Row {
@@ -94,76 +94,93 @@ export function StudentProfileForm({ initial }: { initial: Student }) {
   }
 
   return (
-    <form onSubmit={onSubmit} className="flex flex-col gap-4">
+    <form onSubmit={onSubmit} className="flex flex-col gap-6">
       <Errors errors={errors} />
-      <Field label="Full name" htmlFor="name">
-        <TextInput id="name" value={name} onChange={(e) => setName(e.target.value)} required />
-      </Field>
-      <Field label="University" htmlFor="university">
-        <TextInput
-          id="university"
-          value={university}
-          onChange={(e) => setUniversity(e.target.value)}
-          required
-        />
-      </Field>
-      <Field label="Field of study" htmlFor="fieldOfStudy">
-        <TextInput
-          id="fieldOfStudy"
-          value={fieldOfStudy}
-          onChange={(e) => setFieldOfStudy(e.target.value)}
-          required
-        />
-      </Field>
-      <Field label="Skills" htmlFor="skills" hint="Comma-separated.">
-        <TextInput id="skills" value={skills} onChange={(e) => setSkills(e.target.value)} />
-      </Field>
-      <Field label="Motivations" htmlFor="motivations">
-        <TextArea
-          id="motivations"
-          value={motivations}
-          onChange={(e) => setMotivations(e.target.value)}
-          required
-        />
-      </Field>
-      <Field label="Goals" htmlFor="goals">
-        <TextArea
-          id="goals"
-          value={goals}
-          onChange={(e) => setGoals(e.target.value)}
-          required
-        />
-      </Field>
-      <Field label="Availability (optional)" htmlFor="availability">
-        <TextInput
-          id="availability"
-          value={availability}
-          onChange={(e) => setAvailability(e.target.value)}
-        />
-      </Field>
 
-      <div className="flex flex-col gap-3">
+      <section className="flex flex-col gap-4">
+        <h2 className="text-sm font-semibold uppercase tracking-[0.1em] text-[color:var(--color-ink-muted)]">
+          About you
+        </h2>
+        <Field label="Full name" htmlFor="name">
+          <TextInput
+            id="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+        </Field>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Field label="University" htmlFor="university">
+            <TextInput
+              id="university"
+              value={university}
+              onChange={(e) => setUniversity(e.target.value)}
+              required
+            />
+          </Field>
+          <Field label="Field of study" htmlFor="fieldOfStudy">
+            <TextInput
+              id="fieldOfStudy"
+              value={fieldOfStudy}
+              onChange={(e) => setFieldOfStudy(e.target.value)}
+              required
+            />
+          </Field>
+        </div>
+        <Field label="Skills" htmlFor="skills" hint="Comma-separated, e.g. Canva, Instagram, Copywriting">
+          <TextInput id="skills" value={skills} onChange={(e) => setSkills(e.target.value)} />
+        </Field>
+        <Field label="Availability (optional)" htmlFor="availability" hint="e.g. 10 hours a week, evenings">
+          <TextInput
+            id="availability"
+            value={availability}
+            onChange={(e) => setAvailability(e.target.value)}
+          />
+        </Field>
+      </section>
+
+      <section className="flex flex-col gap-4">
+        <h2 className="text-sm font-semibold uppercase tracking-[0.1em] text-[color:var(--color-ink-muted)]">
+          Motivations & goals
+        </h2>
+        <Field label="What motivates you?" htmlFor="motivations">
+          <TextArea
+            id="motivations"
+            value={motivations}
+            onChange={(e) => setMotivations(e.target.value)}
+            required
+          />
+        </Field>
+        <Field label="What are your goals?" htmlFor="goals">
+          <TextArea
+            id="goals"
+            value={goals}
+            onChange={(e) => setGoals(e.target.value)}
+            required
+          />
+        </Field>
+      </section>
+
+      <section className="flex flex-col gap-3">
         <div className="flex items-center justify-between">
-          <span className="text-sm font-medium">Work history</span>
-          <button
-            type="button"
-            onClick={addRow}
-            className="rounded-md border border-black/10 px-3 py-1 text-xs dark:border-white/15"
-          >
+          <h2 className="text-sm font-semibold uppercase tracking-[0.1em] text-[color:var(--color-ink-muted)]">
+            Work history
+          </h2>
+          <Button type="button" variant="secondary" size="sm" onClick={addRow}>
             Add role
-          </button>
+          </Button>
         </div>
         {rows.length === 0 ? (
-          <p className="text-sm text-black/60 dark:text-white/60">
+          <p className="rounded-xl border border-dashed border-[color:var(--color-line)] bg-[color:var(--color-brand-tint)] px-4 py-6 text-center text-sm text-[color:var(--color-ink-muted)]">
             No roles yet — add your part-time jobs, volunteering or projects.
           </p>
         ) : null}
         {rows.map((r) => (
           <div
             key={r.id}
-            className="flex flex-col gap-2 rounded-md border border-black/10 p-3 dark:border-white/15"
+            className="flex flex-col gap-3 rounded-xl border border-[color:var(--color-line)] bg-[color:var(--color-brand-tint)]/40 p-4"
           >
-            <div className="grid gap-2 sm:grid-cols-2">
+            <div className="grid gap-3 sm:grid-cols-2">
               <Field label="Title" htmlFor={`title-${r.id}`}>
                 <TextInput
                   id={`title-${r.id}`}
@@ -205,24 +222,25 @@ export function StudentProfileForm({ initial }: { initial: Student }) {
             <button
               type="button"
               onClick={() => removeRow(r.id)}
-              className="self-end text-xs text-red-600 underline dark:text-red-300"
+              className="self-end text-xs font-medium text-[color:var(--color-danger)] hover:underline"
             >
-              Remove
+              Remove role
             </button>
           </div>
         ))}
-      </div>
+      </section>
 
-      <div className="flex items-center gap-3">
-        <button
-          type="submit"
-          disabled={status === "saving"}
-          className="rounded-md bg-black px-4 py-2 text-sm font-medium text-white disabled:opacity-60 dark:bg-white dark:text-black"
-        >
+      <div className="flex items-center gap-3 pt-2">
+        <Button type="submit" disabled={status === "saving"}>
           {status === "saving" ? "Saving…" : "Save profile"}
-        </button>
+        </Button>
         {status === "saved" ? (
-          <span className="text-sm text-green-700 dark:text-green-300">Saved.</span>
+          <span className="inline-flex items-center gap-1 text-sm text-[color:var(--color-brand-hover)]">
+            <svg viewBox="0 0 20 20" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2.4">
+              <path d="M4 10l4 4 8-9" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            Saved
+          </span>
         ) : null}
       </div>
     </form>

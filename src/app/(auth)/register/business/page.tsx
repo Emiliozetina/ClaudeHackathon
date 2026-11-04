@@ -1,8 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Errors, Field, TextArea, TextInput } from "@/components/forms/Field";
+import { AuthCard } from "@/components/brand/AuthCard";
+import { Button, Errors, Field, TextArea, TextInput } from "@/components/forms/Field";
 
 export default function RegisterBusinessPage() {
   const router = useRouter();
@@ -45,35 +47,47 @@ export default function RegisterBusinessPage() {
   }
 
   return (
-    <section className="flex flex-col gap-6">
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Sign up as a business</h1>
-        <p className="mt-2 text-sm text-black/60 dark:text-white/60">
-          Company name, about us, and North East base verification.
-        </p>
-      </div>
+    <AuthCard
+      eyebrow="Step 2 of 3 · Business"
+      title="Tell us about your business"
+      subtitle="We verify businesses are based in the North East of England so students know the work is local."
+      footer={
+        <>
+          Already registered?{" "}
+          <Link
+            href="/login"
+            className="font-medium text-[color:var(--color-brand)] hover:text-[color:var(--color-brand-hover)]"
+          >
+            Sign in
+          </Link>
+          .
+        </>
+      }
+    >
       <form onSubmit={onSubmit} className="flex flex-col gap-4">
         <Errors errors={errors} />
-        <Field label="Email" htmlFor="email">
-          <TextInput
-            id="email"
-            type="email"
-            autoComplete="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </Field>
-        <Field label="Password" htmlFor="password" hint="At least 8 characters.">
-          <TextInput
-            id="password"
-            type="password"
-            autoComplete="new-password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </Field>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Field label="Work email" htmlFor="email">
+            <TextInput
+              id="email"
+              type="email"
+              autoComplete="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </Field>
+          <Field label="Password" htmlFor="password" hint="At least 8 characters.">
+            <TextInput
+              id="password"
+              type="password"
+              autoComplete="new-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </Field>
+        </div>
         <Field label="Company name" htmlFor="name">
           <TextInput
             id="name"
@@ -85,7 +99,7 @@ export default function RegisterBusinessPage() {
         <Field
           label="About us"
           htmlFor="about"
-          hint="A short description of what your business does."
+          hint="A short description students will see when they browse your tasks."
         >
           <TextArea
             id="about"
@@ -94,29 +108,28 @@ export default function RegisterBusinessPage() {
             required
           />
         </Field>
-        <Field label="Location" htmlFor="location" hint="e.g. Newcastle upon Tyne">
-          <TextInput
-            id="location"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            required
-          />
-        </Field>
-        <Field label="Website (optional)" htmlFor="website">
-          <TextInput
-            id="website"
-            value={website}
-            onChange={(e) => setWebsite(e.target.value)}
-          />
-        </Field>
-        <button
-          type="submit"
-          disabled={submitting}
-          className="rounded-md bg-black px-4 py-2 text-sm font-medium text-white disabled:opacity-60 dark:bg-white dark:text-black"
-        >
-          {submitting ? "Creating…" : "Create business account"}
-        </button>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Field label="Location" htmlFor="location" hint="e.g. Newcastle upon Tyne">
+            <TextInput
+              id="location"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              required
+            />
+          </Field>
+          <Field label="Website (optional)" htmlFor="website">
+            <TextInput
+              id="website"
+              value={website}
+              onChange={(e) => setWebsite(e.target.value)}
+              placeholder="https://"
+            />
+          </Field>
+        </div>
+        <Button type="submit" disabled={submitting} block>
+          {submitting ? "Creating account…" : "Create business account"}
+        </Button>
       </form>
-    </section>
+    </AuthCard>
   );
 }

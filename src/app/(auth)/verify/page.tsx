@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Errors } from "@/components/forms/Field";
+import { AuthCard } from "@/components/brand/AuthCard";
+import { Button, Errors } from "@/components/forms/Field";
 import type { Role } from "@/types";
 
 interface Me {
@@ -55,43 +56,64 @@ export default function VerifyPage() {
   }
 
   if (loading) {
-    return <section>Loading…</section>;
+    return (
+      <AuthCard title="Verify your account">
+        <p className="text-sm text-[color:var(--color-ink-muted)]">Loading…</p>
+      </AuthCard>
+    );
   }
 
   const alreadyVerified = !!me?.verifiedAt || done;
   const dashboard = me?.role === "business" ? "/dashboard/business" : "/dashboard/student";
 
   return (
-    <section className="flex flex-col gap-6">
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Verify your account</h1>
-        <p className="mt-2 text-sm text-black/60 dark:text-white/60">
-          {me?.role === "student"
-            ? "We check your university email ends in .ac.uk."
-            : "We check your business is based in the North East of England."}
-        </p>
-      </div>
+    <AuthCard
+      eyebrow="Step 3 of 3"
+      title="Verify your account"
+      subtitle={
+        me?.role === "student"
+          ? "We check your university email ends in .ac.uk so businesses know you're a current student."
+          : "We check your business is based in the North East of England so students know the work is local."
+      }
+    >
       {alreadyVerified ? (
-        <div className="rounded-md border border-green-300 bg-green-50 p-4 text-sm text-green-800 dark:border-green-500/40 dark:bg-green-500/10 dark:text-green-200">
-          Your account is verified.{" "}
-          <Link href={dashboard} className="underline">
+        <div className="flex flex-col gap-4">
+          <div className="flex items-start gap-3 rounded-xl border border-[color:var(--color-brand-soft)] bg-[color:var(--color-brand-soft)]/60 p-4">
+            <span className="mt-0.5 inline-flex h-6 w-6 flex-none items-center justify-center rounded-full bg-[color:var(--color-brand)] text-white">
+              <svg viewBox="0 0 20 20" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="3">
+                <path d="M4 10l4 4 8-9" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </span>
+            <div>
+              <p className="text-sm font-medium text-[color:var(--color-ink)]">
+                Your account is verified.
+              </p>
+              <p className="mt-1 text-sm text-[color:var(--color-ink-muted)]">
+                You&apos;re all set — head to your dashboard to{" "}
+                {me?.role === "business" ? "post your first task" : "browse local work"}.
+              </p>
+            </div>
+          </div>
+          <Link
+            href={dashboard}
+            className="inline-flex items-center justify-center gap-2 rounded-xl bg-[color:var(--color-brand)] px-4 py-2.5 text-sm font-medium text-white shadow-[0_1px_2px_rgba(13,27,42,0.08)] transition hover:bg-[color:var(--color-brand-hover)]"
+          >
             Go to your dashboard
+            <span aria-hidden>→</span>
           </Link>
-          .
         </div>
       ) : (
-        <>
+        <div className="flex flex-col gap-4">
           <Errors errors={errors} />
-          <button
-            type="button"
-            onClick={onVerify}
-            disabled={submitting}
-            className="w-max rounded-md bg-black px-4 py-2 text-sm font-medium text-white disabled:opacity-60 dark:bg-white dark:text-black"
-          >
+          <Button type="button" onClick={onVerify} disabled={submitting}>
             {submitting ? "Checking…" : "Verify my account"}
-          </button>
-        </>
+          </Button>
+          <p className="text-xs text-[color:var(--color-ink-muted)]">
+            Verification runs against the email and location you registered with — no extra steps
+            needed.
+          </p>
+        </div>
       )}
-    </section>
+    </AuthCard>
   );
 }
