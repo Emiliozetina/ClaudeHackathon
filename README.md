@@ -1,6 +1,8 @@
 # ClaudeHackathon
 Northumbria Claude Hackathon project  
 
+**Live demo:** https://nexa-hackathon.vercel.app (fake demo data; use the "Demo: acting as" switcher to play the business or the student)
+
 NextJS
 
 https://www.figma.com/design/OBfTJZbbFtNPameBs4sixt/Untitled?node-id=0-1&t=uvpMwQyvlHH7l4h4-1
