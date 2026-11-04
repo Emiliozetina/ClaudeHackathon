@@ -4,7 +4,7 @@ import { connection } from "next/server";
 import { Avatar, Icon } from "@/components/ui";
 import { RoleGate } from "@/components/demo/RoleGate";
 import { HeaderFor } from "@/app/students/[id]/student-header";
-import { getCurrentUser } from "@/lib/auth";
+import { requireUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { formatPay } from "@/lib/tasks";
 import type { Student, Task } from "@/types";
@@ -154,7 +154,7 @@ async function ReviewApplication({ params }: { params: Promise<{ id: string }> }
 }
 
 async function Header() {
-  return <HeaderFor user={await getCurrentUser()} />;
+  return <HeaderFor user={await requireUser()} />;
 }
 
 export default function ApplyPage({ params }: { params: Promise<{ id: string }> }) {

@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 
-import { getCurrentUser } from "@/lib/auth";
+import { requireUser } from "@/lib/auth";
 import { getEngagementForUser, type EngagementView } from "@/lib/engagements";
 import { DomainError } from "@/lib/errors";
 import type { User } from "@/types";
@@ -12,7 +12,7 @@ export type LoadedEngagement = { user: User; engagement: EngagementView } | { fo
  * from a component inside a Suspense boundary. Unknown ids go to the 404 page.
  */
 export async function loadEngagement(id: string): Promise<LoadedEngagement> {
-  const user = await getCurrentUser();
+  const user = await requireUser();
   try {
     return { user, engagement: getEngagementForUser(id, user) };
   } catch (error) {

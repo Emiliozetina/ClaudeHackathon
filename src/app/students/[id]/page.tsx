@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { getCurrentUser } from "@/lib/auth";
+import { currentUser } from "@/lib/auth";
 import { store } from "@/lib/store";
 import { StudentPortfolio } from "./StudentPortfolio";
 import { HeaderFor } from "./student-header";
@@ -17,13 +17,13 @@ export default function StudentPortfolioPage({ params }: PageProps<"/students/[i
 }
 
 async function Portfolio({ id }: { id: string }) {
-  const user = await getCurrentUser();
+  const user = await currentUser();
   const student = store.students.find((s) => s.id === id);
   if (!student) notFound();
   return (
     <>
       <HeaderFor user={user} />
-      <StudentPortfolio student={student} isOwner={student.userId === user.id} />
+      <StudentPortfolio student={student} isOwner={student.userId === user?.id} />
     </>
   );
 }

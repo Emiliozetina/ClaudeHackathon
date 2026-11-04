@@ -10,7 +10,7 @@ type Ctx = { params: Promise<{ id: string }> };
 // The errors thrown while choosing an applicant are all state conflicts (the
 // application isn't open any more, the task is filled...), so they are 409,
 // like the other conflicts in this file.
-const DOMAIN_STATUS = { bad_request: 409, forbidden: 403, not_found: 404 } as const;
+const DOMAIN_STATUS = { bad_request: 409, unauthorized: 401, forbidden: 403, not_found: 404 } as const;
 
 /**
  * PATCH /api/applications/:id  { status }

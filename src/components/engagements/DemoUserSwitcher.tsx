@@ -4,13 +4,13 @@
 
 import { connection } from "next/server";
 
-import { demoAuthEnabled, getCurrentUser, listDemoUsers } from "@/lib/auth";
+import { demoAuthEnabled, listDemoUsers, requireUser } from "@/lib/auth";
 import { switchDemoUser } from "@/lib/auth-actions";
 
 export async function DemoUserSwitcher() {
   await connection();
   if (!demoAuthEnabled()) return null;
-  const current = await getCurrentUser();
+  const current = await requireUser();
   const users = listDemoUsers();
 
   return (
