@@ -5,16 +5,14 @@ import { toThreadListItems } from "@/components/messaging/toThreadListItems";
 import { getCurrentUser } from "@/lib/auth";
 import { listThreadsForUser } from "@/lib/messages";
 
-import { AccountHeader } from "./_components/AccountHeader";
+import { CurrentUserHeader } from "@/components/layout/CurrentUserHeader";
 import { ThreadSidebar } from "./_components/ThreadSidebar";
 
 /** Figma: 12 · Messages (11:1017), with no conversation open. */
 export default function MessagesPage() {
   return (
     <>
-      <Suspense fallback={<div className="h-[72px] border-b border-border-subtle bg-surface-card" />}>
-        <AccountHeader />
-      </Suspense>
+      <CurrentUserHeader />
       <main className="mx-auto w-full max-w-[1240px] px-[20px] pt-[32px] pb-[40px]">
         <h1 className="sr-only">Messages</h1>
         <Suspense fallback={<p className="type-body-sm mt-[16px] text-text-secondary">Loading conversations…</p>}>

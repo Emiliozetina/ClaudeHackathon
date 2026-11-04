@@ -4,11 +4,12 @@ import { notFound } from "next/navigation";
 import { connection } from "next/server";
 import { BlindShortlist } from "@/components/applications/BlindShortlist";
 import { RoleGate } from "@/components/demo/RoleGate";
-import { AppHeader, Chip, Icon } from "@/components/ui";
+import { Chip, Icon } from "@/components/ui";
 import { applicationsForTask, forBusiness } from "@/lib/applications";
 import { getCurrentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { rankApplicants } from "@/lib/shortlist";
+import { CurrentUserHeader } from "@/components/layout/CurrentUserHeader";
 
 // Figma: Screens → "08a · AI shortlist — blind review" (29:1534).
 
@@ -78,7 +79,7 @@ async function Shortlist({ params }: { params: Promise<{ id: string }> }) {
 export default function ShortlistPage({ params }: { params: Promise<{ id: string }> }) {
   return (
     <>
-      <AppHeader role="business" account={{ name: "Tyne Brew Café", subtitle: "Business account", initials: "TB" }} />
+      <CurrentUserHeader />
       <main className="flex w-full flex-col gap-[28px] px-6 pb-[80px] pt-[40px] lg:px-[120px]">
         <Link href="/dashboard/business/tasks" className="type-label flex w-fit items-center gap-[6px] text-teal-700">
           <Icon name="arrow-left-0e7c7b-16" />

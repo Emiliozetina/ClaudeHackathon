@@ -11,7 +11,7 @@ import type { EngagementView } from "@/lib/engagements";
 import { BUSINESS_REVIEW_TAGS, canReview, listReviewsForEngagement, STUDENT_REVIEW_TAGS } from "@/lib/reviews";
 import type { User } from "@/types";
 
-import { AccountHeader } from "./_components/AccountHeader";
+import { CurrentUserHeader } from "@/components/layout/CurrentUserHeader";
 import { PaymentCard } from "./_components/PaymentCard";
 import { RequestChanges } from "./_components/RequestChanges";
 import { ReviewCard } from "./_components/ReviewCard";
@@ -23,9 +23,7 @@ const muted = "type-body-sm text-text-secondary";
 export default function CompleteEngagementPage({ params }: PageProps<"/engagements/[id]/complete">) {
   return (
     <>
-      <Suspense fallback={<div className="h-[72px] border-b border-border-subtle bg-surface-card" />}>
-        <AccountHeader />
-      </Suspense>
+      <CurrentUserHeader />
       <main className="mx-auto w-full max-w-[1240px] px-[20px] pt-[40px] pb-[80px]">
         <h1 className="sr-only">Sign off, pay and review</h1>
         <Suspense fallback={<p className={`mt-[24px] ${muted}`}>Loading engagement...</p>}>

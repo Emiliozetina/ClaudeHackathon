@@ -1,14 +1,15 @@
 import Link from "next/link";
 import { Suspense } from "react";
 import { RoleGate } from "@/components/demo/RoleGate";
-import { AppHeader, Icon } from "@/components/ui";
+import { Icon } from "@/components/ui";
 import { TaskForm } from "@/components/tasks/TaskForm";
+import { CurrentUserHeader } from "@/components/layout/CurrentUserHeader";
 
 // Figma: Screens → "07 · Post a task" (9:464).
 export default function NewTaskPage() {
   return (
     <>
-      <AppHeader role="business" account={{ name: "Tyne Brew Café", subtitle: "Business account", initials: "TB" }} />
+      <CurrentUserHeader />
       <main className="flex w-full flex-col gap-[32px] px-6 pb-[80px] pt-[40px] lg:px-[120px]">
         <nav aria-label="Breadcrumb" className="type-body-sm flex items-center gap-[8px]">
           <Link href="/dashboard/business/tasks" className="text-text-secondary hover:text-text-primary">
