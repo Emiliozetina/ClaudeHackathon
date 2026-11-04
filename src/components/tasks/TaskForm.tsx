@@ -232,7 +232,7 @@ export function TaskForm({ initial = FIGMA_DRAFT, businessName = "Tyne Brew CafÃ
       // the owner's real view of a new task.
       const body = await res.json().catch(() => null);
       const taskId: unknown = body?.data?.id;
-      router.push(typeof taskId === "string" ? `/dashboard/business/tasks/${taskId}/applicants` : "/tasks");
+      router.push(typeof taskId === "string" ? `/dashboard/business/tasks/${taskId}/shortlist` : "/tasks");
       return;
     }
     const body = await res.json().catch(() => null);
