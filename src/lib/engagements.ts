@@ -96,8 +96,9 @@ function postToThread(engagementId: string, senderId: string, body: string) {
 
 /**
  * Integration point for #2: call this when a business chooses an applicant.
- * Marks the application chosen, fills the task, and opens the engagement with
- * its message thread.
+ * Validates everything first, then marks the application chosen, declines the
+ * other open applications, fills the task, and opens the engagement with its
+ * message thread.
  */
 export function createEngagementFromApplication(applicationId: string, user?: User): EngagementView {
   const application = store.applications.find((a) => a.id === applicationId);
@@ -107,11 +108,24 @@ export function createEngagementFromApplication(applicationId: string, user?: Us
   if (user && user.id !== userIdForBusiness(task.businessId)) {
     throw forbidden("Only the business that posted the task can choose an applicant.");
   }
+  if (application.status !== "submitted" && application.status !== "shortlisted") {
+    throw badRequest(`This application is ${application.status} and can't be chosen.`);
+  }
+  if (task.status !== "open") throw badRequest("This task is no longer open.");
   if (store.engagements.some((e) => e.taskId === task.id)) {
     throw badRequest("This task already has an engagement.");
   }
 
   application.status = "chosen";
+  for (const other of store.applications) {
+    if (
+      other.taskId === task.id &&
+      other.id !== application.id &&
+      (other.status === "submitted" || other.status === "shortlisted")
+    ) {
+      other.status = "rejected";
+    }
+  }
   task.status = "filled";
 
   const engagement: Engagement = {
