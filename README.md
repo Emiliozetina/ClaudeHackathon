@@ -31,3 +31,6 @@ ex- Students need to be expert in JavaScript, Students must have used Excel
 2. Work History
 
 3. Motivations and Goal
+
+
+<img width="475" height="578" alt="imagen" src="https://github.com/user-attachments/assets/5f368eb4-0e2a-492f-bfc3-9d53b9fcb23f" />
