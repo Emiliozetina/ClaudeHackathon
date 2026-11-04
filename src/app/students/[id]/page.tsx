@@ -1,8 +1,29 @@
-export default function StudentProfilePage() {
+import { notFound } from "next/navigation";
+import { Suspense } from "react";
+import { currentUser } from "@/lib/auth";
+import { store } from "@/lib/store";
+import { StudentPortfolio } from "./StudentPortfolio";
+import { HeaderFor } from "./student-header";
+
+// Figma: Screens → "14 · Student portfolio" (11:1389). Public portfolio of one student.
+export default function StudentPortfolioPage({ params }: PageProps<"/students/[id]">) {
   return (
-    <section className="mx-auto w-full max-w-5xl px-6 py-10">
-      <h1 className="text-2xl font-semibold tracking-tight">Student profile</h1>
-      <p className="mt-2 text-sm text-black/60 dark:text-white/60">Skills, work history, motivations and verified references.</p>
-    </section>
+    <Suspense fallback={null}>
+      {params.then(({ id }) => (
+        <Portfolio id={id} />
+      ))}
+    </Suspense>
+  );
+}
+
+async function Portfolio({ id }: { id: string }) {
+  const user = await currentUser();
+  const student = store.students.find((s) => s.id === id);
+  if (!student) notFound();
+  return (
+    <>
+      <HeaderFor user={user} />
+      <StudentPortfolio student={student} isOwner={student.userId === user?.id} />
+    </>
   );
 }

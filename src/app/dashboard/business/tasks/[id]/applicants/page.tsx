@@ -10,6 +10,7 @@ import { RoleGate } from "@/components/demo/RoleGate";
 import { requireUser } from "@/lib/auth";
 import { cn } from "@/lib/cn";
 import { db } from "@/lib/db";
+import { mentions } from "@/lib/shortlist";
 
 // Figma: Screens → "08 · Review applicants" (9:722).
 // Names stay hidden until a student is chosen (see forBusiness), so others show as "Candidate A, B…".
@@ -25,7 +26,6 @@ const statusChip: Record<string, { label: string; type: ChipType }> = {
 };
 const tones: AvatarTone[] = ["teal", "amber", "navy"];
 
-const has = (skills: string[], s: string) => skills.some((x) => x.toLowerCase() === s.toLowerCase());
 const initials = (n: string) => n.split(/\s+/).map((p) => p[0]).join("").slice(0, 2).toUpperCase();
 const fmtMonth = (iso?: string) =>
   iso ? new Date(iso).toLocaleDateString("en-GB", { month: "short", year: "numeric" }) : "now";
@@ -45,8 +45,8 @@ async function Applicants({ params, searchParams }: { params: Promise<{ id: stri
   if (!task) notFound();
 
   const score = (a: ApplicationForBusiness) =>
-    task.requirements.filter((r) => has(a.student.skills, r)).length * 10 +
-    task.preferredExperience.filter((r) => has(a.student.skills, r)).length;
+    task.requirements.filter((r) => mentions(a, r)).length * 10 +
+    task.preferredExperience.filter((r) => mentions(a, r)).length;
   const all = applicationsForTask(task.id).map(forBusiness).sort((x, y) => score(y) - score(x));
   const counts = {
     all: all.length,
@@ -60,8 +60,8 @@ async function Applicants({ params, searchParams }: { params: Promise<{ id: stri
   const selected = all.find((a) => a.id === selectedId) ?? visible[0];
   const selIndex = selected ? all.indexOf(selected) : -1;
   const matchLabel = (a: ApplicationForBusiness) => {
-    const r = task.requirements.filter((s) => has(a.student.skills, s)).length;
-    const p = task.preferredExperience.filter((s) => has(a.student.skills, s)).length;
+    const r = task.requirements.filter((s) => mentions(a, s)).length;
+    const p = task.preferredExperience.filter((s) => mentions(a, s)).length;
     return {
       text: `${r}/${task.requirements.length} required${task.preferredExperience.length ? ` · ${p}/${task.preferredExperience.length} preferred` : ""}`,
       full: r === task.requirements.length,
@@ -161,7 +161,7 @@ async function Applicants({ params, searchParams }: { params: Promise<{ id: stri
             <div className="flex flex-col gap-[12px]">
               <p className="type-overline text-text-secondary">SKILLS MATCH</p>
               {[...task.requirements.map((s) => ({ s, req: true })), ...task.preferredExperience.map((s) => ({ s, req: false }))].map(({ s, req }) => {
-                const ok = has(selected.student.skills, s);
+                const ok = mentions(selected, s);
                 return (
                   <div key={`${req}-${s}`} className="flex items-center gap-[10px]">
                     <span className={cn("flex size-[20px] items-center justify-center rounded-pill", ok ? "bg-status-success-bg" : "bg-status-error-bg")}>
