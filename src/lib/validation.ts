@@ -1,3 +1,4 @@
+import { dayOf, todayUtc } from "@/lib/dates";
 import type { Payment, PaymentType, Task } from "@/types";
 
 export interface Parsed<T> {
@@ -33,8 +34,16 @@ function stringList(v: unknown, field: string, errors: string[]): string[] {
   return v.map((x: string) => x.trim()).filter(Boolean);
 }
 
+export interface TaskInputOptions {
+  /** Reject a startDate before today (when posting, or when the date is changed). */
+  requireFutureStart?: boolean;
+}
+
 /** Validates the body for creating a task (all required fields present). */
-export function parseTaskInput(body: Record<string, unknown>): Parsed<TaskInput> {
+export function parseTaskInput(
+  body: Record<string, unknown>,
+  options: TaskInputOptions = {},
+): Parsed<TaskInput> {
   const errors: string[] = [];
 
   const title = typeof body.title === "string" ? body.title.trim() : "";
@@ -54,6 +63,12 @@ export function parseTaskInput(body: Record<string, unknown>): Parsed<TaskInput>
     Date.parse(body.endDate) < Date.parse(body.startDate)
   )
     errors.push("endDate must not be before startDate");
+  if (
+    options.requireFutureStart &&
+    isDate(body.startDate) &&
+    dayOf(body.startDate) < todayUtc()
+  )
+    errors.push("startDate can't be in the past");
 
   let estimatedHours: number | undefined;
   if (body.estimatedHours !== undefined && body.estimatedHours !== null) {

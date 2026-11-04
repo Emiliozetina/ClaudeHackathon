@@ -1,20 +1,28 @@
 import { Suspense } from "react";
 
 import { AutoRefresh } from "@/components/messaging/AutoRefresh";
-import { ThreadSidebar } from "@/components/messaging/ThreadSidebar";
 import { toThreadListItems } from "@/components/messaging/toThreadListItems";
 import { getCurrentUser } from "@/lib/auth";
 import { listThreadsForUser } from "@/lib/messages";
 
+import { AccountHeader } from "./_components/AccountHeader";
+import { ThreadSidebar } from "./_components/ThreadSidebar";
+
+/** Figma: 12 · Messages (11:1017), with no conversation open. */
 export default function MessagesPage() {
   return (
-    <section className="mx-auto w-full max-w-6xl px-6 py-10">
-      <h1 className="sr-only">Messages</h1>
-      <Suspense fallback={<p className="mt-6 text-sm text-black/60 dark:text-white/60">Loading conversations…</p>}>
-        <Inbox />
+    <>
+      <Suspense fallback={<div className="h-[72px] border-b border-border-subtle bg-surface-card" />}>
+        <AccountHeader />
       </Suspense>
-      <AutoRefresh />
-    </section>
+      <main className="mx-auto w-full max-w-[1240px] px-[20px] pt-[32px] pb-[40px]">
+        <h1 className="sr-only">Messages</h1>
+        <Suspense fallback={<p className="type-body-sm mt-[16px] text-text-secondary">Loading conversations…</p>}>
+          <Inbox />
+        </Suspense>
+        <AutoRefresh />
+      </main>
+    </>
   );
 }
 
@@ -23,9 +31,9 @@ async function Inbox() {
   const threads = listThreadsForUser(user);
 
   return (
-    <div className="mt-6 grid overflow-hidden rounded-2xl border border-black/10 lg:h-[680px] lg:grid-cols-[300px_1fr] dark:border-white/10">
+    <div className="mt-[16px] grid overflow-hidden rounded-lg border border-border-subtle bg-surface-card lg:h-[840px] lg:grid-cols-[320px_1fr]">
       <ThreadSidebar threads={toThreadListItems(threads)} />
-      <div className="flex min-h-48 items-center justify-center p-6 text-sm text-black/60 dark:text-white/60">
+      <div className="type-body-sm flex min-h-48 items-center justify-center bg-surface-page p-[24px] text-text-secondary">
         Select a conversation
       </div>
     </div>
