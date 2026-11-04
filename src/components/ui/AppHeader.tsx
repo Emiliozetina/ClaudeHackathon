@@ -22,6 +22,7 @@ const links: Record<HeaderRole, HeaderLink[]> = {
     { label: "Messages", href: "/messages" },
   ],
   student: [
+    { label: "Dashboard", href: "/dashboard/student" },
     { label: "Find work", href: "/tasks" },
     { label: "Applications", href: "/dashboard/student/applications" },
     { label: "Messages", href: "/messages" },
