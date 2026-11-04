@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { connection } from "next/server";
 import { ApplicantActions } from "@/components/applications/ApplicantActions";
+import { RoleGate } from "@/components/demo/RoleGate";
 import { applicationsForTask, forBusiness } from "@/lib/applications";
 import { getCurrentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
@@ -11,6 +12,7 @@ async function Applicants({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   // TODO(auth): getCurrentUser is the shared demo stub until #1 lands.
   const user = await getCurrentUser();
+  if (user.role !== "business") return <RoleGate role="business">{null}</RoleGate>;
   const businessId = db.businesses.find((b) => b.userId === user.id)?.id;
   const task = db.tasks.find((t) => t.id === id && t.businessId === businessId);
   if (!task) notFound();
