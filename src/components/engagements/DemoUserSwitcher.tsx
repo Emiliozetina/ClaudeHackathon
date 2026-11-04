@@ -20,6 +20,7 @@ export async function DemoUserSwitcher() {
           Demo mode: acting as
         </label>
         <select
+          key={current.id}
           id="demo-user"
           name="userId"
           defaultValue={current.id}

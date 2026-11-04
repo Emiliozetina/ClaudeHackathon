@@ -2,10 +2,20 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Button, Icon } from "@/components/ui";
 
 type Action = "shortlisted" | "rejected" | "chosen";
 
-export function ApplicantActions({ applicationId }: { applicationId: string }) {
+// Figma: "08 · Review applicants" detail panel actions (Message / Decline / Choose).
+export function ApplicantActions({
+  applicationId,
+  label = "this applicant",
+  canShortlist = false,
+}: {
+  applicationId: string;
+  label?: string;
+  canShortlist?: boolean;
+}) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -34,13 +44,34 @@ export function ApplicantActions({ applicationId }: { applicationId: string }) {
     setError(body?.error?.message ?? "Something went wrong");
   }
 
-  const btn = "rounded border px-3 py-1 text-sm disabled:opacity-50";
   return (
-    <div className="mt-3 flex flex-wrap items-center gap-2">
-      <button disabled={busy} onClick={() => act("shortlisted")} className={btn}>Shortlist</button>
-      <button disabled={busy} onClick={() => act("chosen")} className={btn}>Choose</button>
-      <button disabled={busy} onClick={() => act("rejected")} className={btn}>Decline</button>
-      {error && <span role="alert" className="text-sm text-red-600">{error}</span>}
+    <div className="flex flex-col gap-[20px]">
+      <div className="grid grid-cols-2 gap-[12px]">
+        {canShortlist ? (
+          <Button variant="secondary" disabled={busy} onClick={() => act("shortlisted")}>
+            Shortlist
+          </Button>
+        ) : (
+          <Button variant="secondary" href="/messages">
+            Message
+          </Button>
+        )}
+        <Button variant="secondary" disabled={busy} onClick={() => act("rejected")}>
+          Decline
+        </Button>
+      </div>
+      <Button size="lg" showArrow disabled={busy} onClick={() => act("chosen")} className="w-full">
+        Choose {label} for this task
+      </Button>
+      <p className="type-caption flex items-start gap-[6px] text-text-secondary">
+        <Icon name="info-5b6472-14" />
+        Other applicants will be notified kindly and returned to browsing.
+      </p>
+      {error && (
+        <p role="alert" className="type-body-sm text-status-error">
+          {error}
+        </p>
+      )}
     </div>
   );
 }

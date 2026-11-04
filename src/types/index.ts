@@ -43,6 +43,8 @@ export interface Student {
   name: string;
   university: string;
   fieldOfStudy: string;
+  /** e.g. "Year 3" (Figma student details). */
+  yearOfStudy?: string;
   skills: string[];
   workHistory: WorkHistoryItem[];
   motivations: string;

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import type { ReactNode } from "react";
+import { Suspense, type ReactNode } from "react";
 import { Avatar, type AvatarTone } from "./Avatar";
 import { Button } from "./Button";
 import { Icon } from "./Icon";
@@ -63,11 +63,23 @@ function activeHref(pathname: string, items: HeaderLink[]) {
  * Figma: Design system → Components → App header (4:100).
  * 72px tall, 40px side padding, white with a bottom border/subtle line.
  */
+function NavItems({ items, current }: { items: HeaderLink[]; current?: string }) {
+  return items.map((item) => (
+    <NavLink key={item.href} href={item.href} active={item.href === current}>
+      {item.label}
+    </NavLink>
+  ));
+}
+
+/** Reads the URL, so it sits inside <Suspense> for dynamic routes. */
+function ActiveNavItems({ items }: { items: HeaderLink[] }) {
+  const pathname = usePathname();
+  return <NavItems items={items} current={activeHref(pathname, items)} />;
+}
+
 export function AppHeader(props: AppHeaderProps) {
   const { role } = props;
-  const pathname = usePathname();
   const items = links[role];
-  const current = activeHref(pathname, items);
   const tone: AvatarTone = role === "business" ? "navy" : "teal";
 
   return (
@@ -78,11 +90,9 @@ export function AppHeader(props: AppHeaderProps) {
         </Link>
         {/* Nav links are hidden on narrow screens; Figma only has the 1440px layout. */}
         <nav className="hidden items-center gap-[28px] lg:flex">
-          {items.map((item) => (
-            <NavLink key={item.href} href={item.href} active={item.href === current}>
-              {item.label}
-            </NavLink>
-          ))}
+          <Suspense fallback={<NavItems items={items} />}>
+            <ActiveNavItems items={items} />
+          </Suspense>
         </nav>
       </div>
 
@@ -96,7 +106,7 @@ export function AppHeader(props: AppHeaderProps) {
           </>
         ) : (
           <>
-            {role === "business" && <Button href="/tasks/new">Post a task</Button>}
+            {role === "business" && <Button href="/tasks/new/describe">Post a task</Button>}
             {props.actions}
             <button type="button" className="shrink-0 rounded-pill" aria-label="Notifications">
               <Icon name="notifications" />
