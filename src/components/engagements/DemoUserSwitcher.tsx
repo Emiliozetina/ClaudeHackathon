@@ -1,9 +1,13 @@
 // TEMP: demo-only "act as" control until #1 ships real login. Server Component.
 
-import { getCurrentUser, listDemoUsers } from "@/lib/auth";
+import { connection } from "next/server";
+
+import { demoAuthEnabled, getCurrentUser, listDemoUsers } from "@/lib/auth";
 import { switchDemoUser } from "@/lib/auth-actions";
 
 export async function DemoUserSwitcher() {
+  await connection();
+  if (!demoAuthEnabled()) return null;
   const current = await getCurrentUser();
   const users = listDemoUsers();
 

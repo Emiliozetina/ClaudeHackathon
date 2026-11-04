@@ -1,4 +1,4 @@
-import { DEMO_USER_COOKIE } from "@/lib/auth";
+import { DEMO_USER_COOKIE, demoAuthEnabled } from "@/lib/auth";
 import { store } from "@/lib/store";
 import type { ID, Role } from "@/types";
 
@@ -24,12 +24,15 @@ function readCookie(req: Request, name: string): string | undefined {
  * src/lib/auth.ts: the `demoUserId` cookie set by the "acting as" switcher,
  * falling back to the first seed user. The `x-dev-role` and
  * `x-dev-profile-id` headers still work for curl testing when no cookie is set.
+ * In production this returns null (-> 401) unless DEMO_AUTH=true; see
+ * demoAuthEnabled() in src/lib/auth.ts.
  *
  * When auth is merged, replace the body of this function with the real
  * session lookup and keep the signature; the task/application routes only
  * depend on `getActor`.
  */
 export function getActor(req: Request): Actor | null {
+  if (!demoAuthEnabled()) return null;
   const cookieUserId = readCookie(req, DEMO_USER_COOKIE);
   const role = req.headers.get("x-dev-role");
   const profileId = req.headers.get("x-dev-profile-id");
