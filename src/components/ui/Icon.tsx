@@ -13,6 +13,10 @@ const icons = {
   "map-pin-teal-24": 24,
   "zap-amber-16": 16,
   "zap-teal-24": 24,
+  // Exported from the Screens page (name-colour-size).
+  "bulb-633806-18": 18,
+  "chev-6b7280-20": 20,
+  "users-5b6472-16": 16,
   "chevron-down-16": 16,
   "chevron-down-20": 20,
   clock: 16,
