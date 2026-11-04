@@ -1,6 +1,6 @@
 /**
- * Fake demo data. Every person and business here is made up; never put real
- * people's personal data in this file.
+ * Fake demo data only. No real people or contact details.
+ * Replaced by the real database when it exists.
  */
 
 import type {
@@ -15,6 +15,102 @@ import type {
   User,
 } from "@/types";
 
+// Tasks / Applications (#2): open tasks students can apply to.
+export const seedBusinesses: Business[] = [
+  {
+    id: "biz_1",
+    userId: "user_biz_1",
+    name: "Tyneside Print Co",
+    about: "A small print shop in Newcastle taking on more online orders.",
+    location: "Newcastle upon Tyne",
+    northEastVerified: true,
+  },
+  {
+    id: "biz_2",
+    userId: "user_biz_2",
+    name: "Wear Valley Bakery",
+    about: "Family bakery in Durham with a growing wholesale side.",
+    location: "Durham",
+    northEastVerified: true,
+  },
+];
+
+export const seedStudents: Student[] = [
+  {
+    id: "stu_1",
+    userId: "user_stu_1",
+    name: "Demo Student One",
+    university: "Northumbria University",
+    fieldOfStudy: "Computer Science",
+    skills: ["JavaScript", "Excel"],
+    workHistory: [
+      {
+        id: "wh_1",
+        title: "Retail assistant",
+        organisation: "Example Shop",
+        startDate: "2025-06-01",
+        endDate: "2025-09-01",
+      },
+    ],
+    motivations: "I want practical experience with a local business.",
+    goals: "Work in the North East after graduating.",
+    universityEmailVerified: true,
+  },
+  {
+    id: "stu_2",
+    userId: "user_stu_2",
+    name: "Demo Student Two",
+    university: "Durham University",
+    fieldOfStudy: "Business Management",
+    skills: ["Excel", "Social media"],
+    workHistory: [],
+    motivations: "Looking to build a first portfolio.",
+    goals: "Start in marketing or operations.",
+    universityEmailVerified: true,
+  },
+];
+
+export const seedTasks: Task[] = [
+  {
+    id: "task_1",
+    businessId: "biz_1",
+    title: "Tidy up our order spreadsheet",
+    description:
+      "Clean and restructure our Excel order tracker so we can filter by customer and due date.",
+    startDate: "2026-12-01",
+    endDate: "2026-12-14",
+    estimatedHours: 12,
+    requirements: ["Has used Excel (filters, formulas)"],
+    preferredExperience: ["Experience with small business admin"],
+    payment: { type: "fixed", amount: 180, currency: "GBP" },
+    location: "Newcastle upon Tyne",
+    remote: true,
+    status: "open",
+    createdAt: "2026-11-01T09:00:00.000Z",
+  },
+  {
+    id: "task_2",
+    businessId: "biz_2",
+    title: "Update our wholesale web page",
+    description:
+      "Refresh the wholesale page on our website with new products and prices.",
+    startDate: "2026-12-05",
+    endDate: "2026-12-20",
+    estimatedHours: 10,
+    requirements: ["Comfortable with JavaScript and basic HTML"],
+    preferredExperience: ["Has edited a small business website before"],
+    payment: { type: "hourly", amount: 12, currency: "GBP" },
+    location: "Durham",
+    remote: false,
+    status: "open",
+    createdAt: "2026-11-02T09:00:00.000Z",
+  },
+];
+
+export const seedApplications: Application[] = [];
+
+// Engagements / Messaging / Reviews (#3): work already under way. createSeed()
+// combines everything into the single store in src/lib/store.ts.
 export interface SeedData {
   users: User[];
   businesses: Business[];
@@ -30,16 +126,23 @@ export interface SeedData {
 export function createSeed(): SeedData {
   return {
     users: [
+      // Users for the #2 seed profiles above. The first one is the default demo user.
+      { id: "user_biz_1", email: "orders@tynesideprint.example", role: "business", verifiedAt: "2026-10-01T09:00:00Z", createdAt: "2026-10-01T09:00:00Z" },
+      { id: "user_biz_2", email: "hello@wearvalleybakery.example", role: "business", verifiedAt: "2026-10-01T09:00:00Z", createdAt: "2026-10-01T09:00:00Z" },
+      { id: "user_stu_1", email: "student.one@uni.example.ac.uk", role: "student", verifiedAt: "2026-10-01T09:00:00Z", createdAt: "2026-10-01T09:00:00Z" },
+      { id: "user_stu_2", email: "student.two@uni.example.ac.uk", role: "student", verifiedAt: "2026-10-01T09:00:00Z", createdAt: "2026-10-01T09:00:00Z" },
       { id: "u-biz-1", email: "hello@tynebrew.example", role: "business", verifiedAt: "2026-10-01T09:00:00Z", createdAt: "2026-10-01T09:00:00Z" },
       { id: "u-biz-2", email: "team@quaysidestudio.example", role: "business", verifiedAt: "2026-10-03T09:00:00Z", createdAt: "2026-10-03T09:00:00Z" },
       { id: "u-stu-1", email: "amy.carter@uni.example.ac.uk", role: "student", verifiedAt: "2026-10-05T09:00:00Z", createdAt: "2026-10-05T09:00:00Z" },
       { id: "u-stu-2", email: "sam.okafor@uni.example.ac.uk", role: "student", verifiedAt: "2026-10-06T09:00:00Z", createdAt: "2026-10-06T09:00:00Z" },
     ],
     businesses: [
+      ...structuredClone(seedBusinesses),
       { id: "b-1", userId: "u-biz-1", name: "Tyne Brew Coffee", about: "Independent coffee roaster with two cafés in Newcastle.", location: "Newcastle upon Tyne", northEastVerified: true },
       { id: "b-2", userId: "u-biz-2", name: "Quayside Studio", about: "Small design studio working with local charities.", location: "Gateshead", northEastVerified: true },
     ],
     students: [
+      ...structuredClone(seedStudents),
       {
         id: "s-1",
         userId: "u-stu-1",
@@ -66,6 +169,7 @@ export function createSeed(): SeedData {
       },
     ],
     tasks: [
+      ...structuredClone(seedTasks),
       {
         id: "t-1",
         businessId: "b-1",
@@ -100,6 +204,7 @@ export function createSeed(): SeedData {
       },
     ],
     applications: [
+      ...structuredClone(seedApplications),
       { id: "a-1", taskId: "t-1", studentId: "s-1", note: "I've built two React sites for societies.", status: "chosen", anonymous: false, submittedAt: "2026-10-22T12:00:00Z" },
       { id: "a-2", taskId: "t-2", studentId: "s-2", note: "I run my society's Instagram.", status: "chosen", anonymous: false, submittedAt: "2026-10-07T12:00:00Z" },
     ],
