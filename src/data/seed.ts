@@ -221,9 +221,9 @@ export function createSeed(): SeedData {
     ],
     applications: [
       ...structuredClone(seedApplications),
-      { id: "a-1", taskId: "t-1", studentId: "s-1", note: "I've built two React sites for societies.", status: "chosen", anonymous: false, submittedAt: "2026-10-22T12:00:00Z" },
-      { id: "a-2", taskId: "t-2", studentId: "s-2", note: "I run my society's Instagram.", status: "chosen", anonymous: false, submittedAt: "2026-10-07T12:00:00Z" },
-      { id: "a-3", taskId: "t-3", studentId: "s-1", note: "I shoot events for my course.", status: "chosen", anonymous: false, submittedAt: "2026-09-05T12:00:00Z" },
+      { id: "a-1", taskId: "t-1", studentId: "s-1", note: "I've built two React sites for societies.", status: "chosen", submittedAt: "2026-10-22T12:00:00Z" },
+      { id: "a-2", taskId: "t-2", studentId: "s-2", note: "I run my society's Instagram.", status: "chosen", submittedAt: "2026-10-07T12:00:00Z" },
+      { id: "a-3", taskId: "t-3", studentId: "s-1", note: "I shoot events for my course.", status: "chosen", submittedAt: "2026-09-05T12:00:00Z" },
     ],
     engagements: [
       {
