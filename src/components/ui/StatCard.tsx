@@ -13,7 +13,7 @@ export function StatCard({ label, value, delta, className }: StatCardProps) {
   return (
     <div
       className={cn(
-        "flex w-full flex-col items-start gap-[8px] rounded-lg border border-border-subtle bg-surface-card p-[20px]",
+        "flex flex-col items-start gap-[8px] rounded-lg border border-border-subtle bg-surface-card p-[20px]",
         className,
       )}
     >
