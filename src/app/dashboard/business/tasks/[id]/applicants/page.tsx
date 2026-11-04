@@ -3,15 +3,16 @@ import { notFound } from "next/navigation";
 import { connection } from "next/server";
 import { ApplicantActions } from "@/components/applications/ApplicantActions";
 import { applicationsForTask, forBusiness } from "@/lib/applications";
+import { getCurrentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
-
-// TODO(auth): use the signed-in business instead of this dev identity.
-const DEV_BUSINESS_ID = "biz_1";
 
 async function Applicants({ params }: { params: Promise<{ id: string }> }) {
   await connection();
   const { id } = await params;
-  const task = db.tasks.find((t) => t.id === id && t.businessId === DEV_BUSINESS_ID);
+  // TODO(auth): getCurrentUser is the shared demo stub until #1 lands.
+  const user = await getCurrentUser();
+  const businessId = db.businesses.find((b) => b.userId === user.id)?.id;
+  const task = db.tasks.find((t) => t.id === id && t.businessId === businessId);
   if (!task) notFound();
 
   const apps = applicationsForTask(task.id).map(forBusiness);

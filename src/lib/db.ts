@@ -1,33 +1,7 @@
-import {
-  seedApplications,
-  seedBusinesses,
-  seedStudents,
-  seedTasks,
-} from "@/data/seed";
-import type { Application, Business, Student, Task } from "@/types";
-
 /**
- * In-memory store for tasks and applications. Data resets whenever the server
- * restarts. It is kept on `globalThis` so Next.js dev hot reloads don't wipe
- * it. Swap this module for a real database later; the routes only use the
- * exports below.
+ * In-memory store for tasks and applications. This is the same single store
+ * that engagements, messages and reviews use (src/lib/store.ts), so choosing
+ * an applicant and opening the engagement see the same data. Swap that module
+ * for a real database later; the routes only use the exports below.
  */
-interface Db {
-  businesses: Business[];
-  students: Student[];
-  tasks: Task[];
-  applications: Application[];
-}
-
-const g = globalThis as unknown as { __hackathonDb?: Db };
-
-export const db: Db = (g.__hackathonDb ??= {
-  businesses: structuredClone(seedBusinesses),
-  students: structuredClone(seedStudents),
-  tasks: structuredClone(seedTasks),
-  applications: structuredClone(seedApplications),
-});
-
-export function newId(prefix: string): string {
-  return `${prefix}_${crypto.randomUUID()}`;
-}
+export { store as db, newId } from "@/lib/store";
