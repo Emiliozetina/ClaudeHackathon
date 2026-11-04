@@ -5,11 +5,12 @@
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 
-import { DEMO_USER_COOKIE, demoAuthEnabled } from "@/lib/auth";
+import { DEMO_USER_COOKIE, demoAuthEnabled, signOut } from "@/lib/auth";
 
 export async function switchDemoUser(formData: FormData) {
   if (!demoAuthEnabled()) return;
   const userId = String(formData.get("userId") ?? "");
+  await signOut();
   (await cookies()).set(DEMO_USER_COOKIE, userId, { path: "/", httpOnly: true, sameSite: "lax" });
   revalidatePath("/", "layout");
 }

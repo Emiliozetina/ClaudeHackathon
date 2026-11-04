@@ -3,6 +3,8 @@
  * Replaced by the real database when it exists.
  */
 
+import { scryptSync } from "crypto";
+
 import type {
   Application,
   Business,
@@ -10,6 +12,7 @@ import type {
   Message,
   MessageThread,
   Review,
+  Session,
   Student,
   Task,
   User,
@@ -109,10 +112,20 @@ export const seedTasks: Task[] = [
 
 export const seedApplications: Application[] = [];
 
+/**
+ * Every demo account signs in with the password "password". The salt is fixed
+ * so the hash is stable across restarts. Demo data only: never reuse this for
+ * real accounts.
+ */
+export const DEMO_PASSWORD = "password";
+const DEMO_SALT = Buffer.from("00112233445566778899aabbccddeeff", "hex");
+const DEMO_PASSWORD_HASH = `scrypt$16384$${DEMO_SALT.toString("hex")}$${scryptSync(DEMO_PASSWORD, DEMO_SALT, 64, { N: 16384 }).toString("hex")}`;
+
 // Engagements / Messaging / Reviews (#3): work already under way. createSeed()
 // combines everything into the single store in src/lib/store.ts.
 export interface SeedData {
   users: User[];
+  sessions: Session[];
   businesses: Business[];
   students: Student[];
   tasks: Task[];
@@ -127,15 +140,16 @@ export function createSeed(): SeedData {
   return {
     users: [
       // Users for the #2 seed profiles above. The first one is the default demo user.
-      { id: "user_biz_1", email: "orders@tynesideprint.example", role: "business", verifiedAt: "2026-10-01T09:00:00Z", createdAt: "2026-10-01T09:00:00Z" },
-      { id: "user_biz_2", email: "hello@wearvalleybakery.example", role: "business", verifiedAt: "2026-10-01T09:00:00Z", createdAt: "2026-10-01T09:00:00Z" },
-      { id: "user_stu_1", email: "student.one@uni.example.ac.uk", role: "student", verifiedAt: "2026-10-01T09:00:00Z", createdAt: "2026-10-01T09:00:00Z" },
-      { id: "user_stu_2", email: "student.two@uni.example.ac.uk", role: "student", verifiedAt: "2026-10-01T09:00:00Z", createdAt: "2026-10-01T09:00:00Z" },
-      { id: "u-biz-1", email: "hello@tynebrew.example", role: "business", verifiedAt: "2026-10-01T09:00:00Z", createdAt: "2026-10-01T09:00:00Z" },
-      { id: "u-biz-2", email: "team@quaysidestudio.example", role: "business", verifiedAt: "2026-10-03T09:00:00Z", createdAt: "2026-10-03T09:00:00Z" },
-      { id: "u-stu-1", email: "amy.carter@uni.example.ac.uk", role: "student", verifiedAt: "2026-10-05T09:00:00Z", createdAt: "2026-10-05T09:00:00Z" },
-      { id: "u-stu-2", email: "sam.okafor@uni.example.ac.uk", role: "student", verifiedAt: "2026-10-06T09:00:00Z", createdAt: "2026-10-06T09:00:00Z" },
+      { id: "user_biz_1", email: "orders@tynesideprint.example", role: "business", passwordHash: DEMO_PASSWORD_HASH, verifiedAt: "2026-10-01T09:00:00Z", createdAt: "2026-10-01T09:00:00Z" },
+      { id: "user_biz_2", email: "hello@wearvalleybakery.example", role: "business", passwordHash: DEMO_PASSWORD_HASH, verifiedAt: "2026-10-01T09:00:00Z", createdAt: "2026-10-01T09:00:00Z" },
+      { id: "user_stu_1", email: "student.one@uni.example.ac.uk", role: "student", passwordHash: DEMO_PASSWORD_HASH, verifiedAt: "2026-10-01T09:00:00Z", createdAt: "2026-10-01T09:00:00Z" },
+      { id: "user_stu_2", email: "student.two@uni.example.ac.uk", role: "student", passwordHash: DEMO_PASSWORD_HASH, verifiedAt: "2026-10-01T09:00:00Z", createdAt: "2026-10-01T09:00:00Z" },
+      { id: "u-biz-1", email: "hello@tynebrew.example", role: "business", passwordHash: DEMO_PASSWORD_HASH, verifiedAt: "2026-10-01T09:00:00Z", createdAt: "2026-10-01T09:00:00Z" },
+      { id: "u-biz-2", email: "team@quaysidestudio.example", role: "business", passwordHash: DEMO_PASSWORD_HASH, verifiedAt: "2026-10-03T09:00:00Z", createdAt: "2026-10-03T09:00:00Z" },
+      { id: "u-stu-1", email: "amy.carter@uni.example.ac.uk", role: "student", passwordHash: DEMO_PASSWORD_HASH, verifiedAt: "2026-10-05T09:00:00Z", createdAt: "2026-10-05T09:00:00Z" },
+      { id: "u-stu-2", email: "sam.okafor@uni.example.ac.uk", role: "student", passwordHash: DEMO_PASSWORD_HASH, verifiedAt: "2026-10-06T09:00:00Z", createdAt: "2026-10-06T09:00:00Z" },
     ],
+    sessions: [],
     businesses: [
       ...structuredClone(seedBusinesses),
       { id: "b-1", userId: "u-biz-1", name: "Tyne Brew Coffee", about: "Independent coffee roaster with two cafés in Newcastle.", location: "Newcastle upon Tyne", northEastVerified: true },

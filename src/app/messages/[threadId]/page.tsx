@@ -9,7 +9,7 @@ import { MessageForm } from "@/components/messaging/MessageForm";
 import { MessageList } from "@/components/messaging/MessageList";
 import { ThreadSidebar } from "@/components/messaging/ThreadSidebar";
 import { toThreadListItems } from "@/components/messaging/toThreadListItems";
-import { getCurrentUser } from "@/lib/auth";
+import { requireUser } from "@/lib/auth";
 import { getEngagementForUser, type EngagementView } from "@/lib/engagements";
 import { DomainError } from "@/lib/errors";
 import { getThreadForUser, listThreadsForUser, type ThreadDetail } from "@/lib/messages";
@@ -39,7 +39,7 @@ export default function MessageThreadPage({ params }: PageProps<"/messages/[thre
 }
 
 async function Conversation({ threadId }: { threadId: string }) {
-  const user = await getCurrentUser();
+  const user = await requireUser();
   const threads = toThreadListItems(listThreadsForUser(user));
 
   let thread: ThreadDetail;

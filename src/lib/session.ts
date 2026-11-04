@@ -1,5 +1,10 @@
-import { DEMO_USER_COOKIE, demoAuthEnabled } from "@/lib/auth";
-import { store } from "@/lib/store";
+import {
+  DEMO_USER_COOKIE,
+  SESSION_COOKIE,
+  demoAuthEnabled,
+  profileIdFor,
+  resolveUser,
+} from "@/lib/auth";
 import type { ID, Role } from "@/types";
 
 /** Who is making the request. */
@@ -19,32 +24,26 @@ function readCookie(req: Request, name: string): string | undefined {
 }
 
 /**
- * TEMPORARY placeholder until the real auth (api/auth, owned by the Auth /
- * Profiles work) lands. Uses the same demo user as getCurrentUser() in
- * src/lib/auth.ts: the `demoUserId` cookie set by the "acting as" switcher,
- * falling back to the first seed user. The `x-dev-role` and
- * `x-dev-profile-id` headers still work for curl testing when no cookie is set.
- * In production this returns null (-> 401) unless DEMO_AUTH=true; see
- * demoAuthEnabled() in src/lib/auth.ts.
- *
- * When auth is merged, replace the body of this function with the real
- * session lookup and keep the signature; the task/application routes only
- * depend on `getActor`.
+ * Resolves the caller for the task/application API routes with the same rules
+ * as currentUser() in src/lib/auth.ts:
+ * 1. the session cookie set by /api/auth/login or /api/auth/register;
+ * 2. with demo auth on and no cookie at all, the `x-dev-role` /
+ *    `x-dev-profile-id` headers (curl testing);
+ * 3. with demo auth on, the demo user (`demoUserId` cookie or the default).
+ * Returns null (-> 401) when nobody is signed in.
  */
 export function getActor(req: Request): Actor | null {
-  if (!demoAuthEnabled()) return null;
-  const cookieUserId = readCookie(req, DEMO_USER_COOKIE);
-  const role = req.headers.get("x-dev-role");
-  const profileId = req.headers.get("x-dev-profile-id");
-  if (!cookieUserId && (role === "business" || role === "student") && profileId) {
-    return { role, profileId };
+  const sessionToken = readCookie(req, SESSION_COOKIE);
+  const demoUserId = readCookie(req, DEMO_USER_COOKIE);
+
+  if (demoAuthEnabled() && !sessionToken && !demoUserId) {
+    const role = req.headers.get("x-dev-role");
+    const profileId = req.headers.get("x-dev-profile-id");
+    if ((role === "business" || role === "student") && profileId) return { role, profileId };
   }
 
-  const user = store.users.find((u) => u.id === cookieUserId) ?? store.users[0];
+  const user = resolveUser(sessionToken, demoUserId);
   if (!user) return null;
-  const profile =
-    user.role === "business"
-      ? store.businesses.find((b) => b.userId === user.id)
-      : store.students.find((s) => s.userId === user.id);
-  return profile ? { role: user.role, profileId: profile.id } : null;
+  const profileId = profileIdFor(user);
+  return profileId ? { role: user.role, profileId } : null;
 }

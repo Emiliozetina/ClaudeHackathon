@@ -7,7 +7,7 @@ import { getActor } from "@/lib/session";
 
 type Ctx = { params: Promise<{ id: string }> };
 
-const DOMAIN_STATUS = { bad_request: 400, forbidden: 403, not_found: 404 } as const;
+const DOMAIN_STATUS = { bad_request: 400, unauthorized: 401, forbidden: 403, not_found: 404 } as const;
 
 /**
  * PATCH /api/applications/:id  { status }

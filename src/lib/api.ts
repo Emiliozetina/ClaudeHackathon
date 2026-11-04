@@ -2,6 +2,7 @@ import { DomainError } from "@/lib/errors";
 
 const STATUS: Record<DomainError["code"], number> = {
   bad_request: 400,
+  unauthorized: 401,
   forbidden: 403,
   not_found: 404,
 };
