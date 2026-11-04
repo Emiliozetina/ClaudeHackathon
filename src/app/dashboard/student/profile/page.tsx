@@ -1,8 +1,36 @@
-export default function StudentProfileEditPage() {
+import { Suspense } from "react";
+import { DemoUserSwitcher } from "@/components/engagements/DemoUserSwitcher";
+import { getCurrentUser } from "@/lib/auth";
+import { store } from "@/lib/store";
+import { StudentPortfolio } from "@/app/students/[id]/StudentPortfolio";
+import { HeaderFor } from "@/app/students/[id]/student-header";
+
+// Figma: Screens → "14 · Student portfolio" (11:1389), for the signed-in student.
+export default function MyPortfolioPage() {
   return (
-    <section className="mx-auto w-full max-w-5xl px-6 py-10">
-      <h1 className="text-2xl font-semibold tracking-tight">Your profile</h1>
-      <p className="mt-2 text-sm text-black/60 dark:text-white/60">Skills, CV, availability, motivations and goals.</p>
-    </section>
+    <Suspense fallback={null}>
+      <MyPortfolio />
+    </Suspense>
+  );
+}
+
+async function MyPortfolio() {
+  const user = await getCurrentUser();
+  const student = store.students.find((s) => s.userId === user.id);
+  return (
+    <>
+      <HeaderFor user={user} />
+      {student ? (
+        <StudentPortfolio student={student} isOwner />
+      ) : (
+        <main className="mx-auto flex w-full max-w-[1240px] flex-col gap-[16px] px-[20px] pt-[40px] pb-[80px]">
+          <h1 className="type-h2 text-text-primary">Portfolio</h1>
+          <p className="type-body text-text-secondary">
+            Portfolios belong to student accounts. Switch to a student to see theirs.
+          </p>
+          <DemoUserSwitcher />
+        </main>
+      )}
+    </>
   );
 }
