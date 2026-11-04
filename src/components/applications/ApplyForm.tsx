@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { DEV_STUDENT_HEADERS } from "@/lib/dev-actor";
 
 export function ApplyForm({ taskId }: { taskId: string }) {
   const router = useRouter();
@@ -16,12 +15,13 @@ export function ApplyForm({ taskId }: { taskId: string }) {
     setError(null);
     const res = await fetch("/api/applications", {
       method: "POST",
-      headers: { "content-type": "application/json", ...DEV_STUDENT_HEADERS },
+      headers: { "content-type": "application/json" },
       body: JSON.stringify({ taskId, note }),
     });
     setBusy(false);
     if (res.ok) {
-      router.push("/dashboard/student/applications");
+      // The student applications list is still a stub (#17); go back to the task.
+      router.push(`/tasks/${taskId}`);
       return;
     }
     const body = await res.json().catch(() => null);

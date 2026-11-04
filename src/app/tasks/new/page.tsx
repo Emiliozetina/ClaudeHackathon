@@ -1,3 +1,6 @@
+import { Suspense } from "react";
+
+import { RoleGate } from "@/components/demo/RoleGate";
 import { TaskForm } from "@/components/tasks/TaskForm";
 
 export default function NewTaskPage() {
@@ -7,7 +10,11 @@ export default function NewTaskPage() {
       <p className="mt-2 text-sm text-black/60 dark:text-white/60">
         Work, period, requirements, preferred experience and pay.
       </p>
-      <TaskForm />
+      <Suspense fallback={<p className="mt-6 text-sm">Loading…</p>}>
+        <RoleGate role="business">
+          <TaskForm />
+        </RoleGate>
+      </Suspense>
     </section>
   );
 }

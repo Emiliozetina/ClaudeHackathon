@@ -1,4 +1,4 @@
-import { DEMO_USER_COOKIE, demoAuthEnabled } from "@/lib/auth";
+import { DEMO_USER_COOKIE, demoAuthEnabled, resolveDemoUser } from "@/lib/auth";
 import { store } from "@/lib/store";
 import type { ID, Role } from "@/types";
 
@@ -22,8 +22,9 @@ function readCookie(req: Request, name: string): string | undefined {
  * TEMPORARY placeholder until the real auth (api/auth, owned by the Auth /
  * Profiles work) lands. Uses the same demo user as getCurrentUser() in
  * src/lib/auth.ts: the `demoUserId` cookie set by the "acting as" switcher,
- * falling back to the first seed user. The `x-dev-role` and
- * `x-dev-profile-id` headers still work for curl testing when no cookie is set.
+ * falling back to DEFAULT_DEMO_USER_ID. The UI never sends the `x-dev-role` /
+ * `x-dev-profile-id` headers; they only exist for curl testing and are
+ * ignored whenever the cookie is set, so pages and API always agree.
  * In production this returns null (-> 401) unless DEMO_AUTH=true; see
  * demoAuthEnabled() in src/lib/auth.ts.
  *
@@ -40,7 +41,7 @@ export function getActor(req: Request): Actor | null {
     return { role, profileId };
   }
 
-  const user = store.users.find((u) => u.id === cookieUserId) ?? store.users[0];
+  const user = resolveDemoUser(cookieUserId);
   if (!user) return null;
   const profile =
     user.role === "business"

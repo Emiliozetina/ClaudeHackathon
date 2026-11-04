@@ -1,7 +1,6 @@
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
 
-import { DemoUserSwitcher } from "@/components/engagements/DemoUserSwitcher";
 import { EngagementPanel } from "@/components/engagements/EngagementPanel";
 import { AutoRefresh } from "@/components/messaging/AutoRefresh";
 import { Avatar } from "@/components/messaging/Avatar";
@@ -25,9 +24,6 @@ const STATUS_LABELS: Record<EngagementStatus, string> = {
 export default function MessageThreadPage({ params }: PageProps<"/messages/[threadId]">) {
   return (
     <section className="mx-auto w-full max-w-6xl px-6 py-10">
-      <Suspense fallback={null}>
-        <DemoUserSwitcher />
-      </Suspense>
       <h1 className="sr-only">Conversation</h1>
       <Suspense fallback={<p className="mt-6 text-sm text-black/60 dark:text-white/60">Loading conversation…</p>}>
         {params.then(({ threadId }) => (
