@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { HeaderFor, initialsOf } from "@/app/students/[id]/student-header";
 import { Avatar, Button, Chip, Icon, type AvatarTone, type ChipType } from "@/components/ui";
-import { getCurrentUser } from "@/lib/auth";
+import { requireUser } from "@/lib/auth";
 import { cn } from "@/lib/cn";
 import { store } from "@/lib/store";
 import { formatPay, listOpenTasks } from "@/lib/tasks";
@@ -72,7 +72,7 @@ export default function StudentApplicationsPage({ searchParams }: { searchParams
 }
 
 async function Applications({ tab: tabParam }: { tab?: string | string[] }) {
-  const user = await getCurrentUser();
+  const user = await requireUser();
   const student = store.students.find((s) => s.userId === user.id);
   const tab: Tab = TABS.some((t) => t.key === tabParam) ? (tabParam as Tab) : "active";
 

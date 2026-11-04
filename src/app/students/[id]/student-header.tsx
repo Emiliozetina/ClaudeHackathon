@@ -1,3 +1,4 @@
+import { SignOutButton } from "@/components/brand/SignOutButton";
 import { AppHeader } from "@/components/ui";
 import { store } from "@/lib/store";
 import type { User } from "@/types";
@@ -12,8 +13,9 @@ export function initialsOf(name: string): string {
     .join("");
 }
 
-/** App header for the signed-in (demo) user, business or student. */
-export function HeaderFor({ user }: { user: User }) {
+/** App header for the signed-in user, or the public header when signed out. */
+export function HeaderFor({ user }: { user: User | null }) {
+  if (!user) return <AppHeader role="public" />;
   if (user.role === "business") {
     const business = store.businesses.find((b) => b.userId === user.id);
     const name = business?.name ?? "Business";
@@ -21,6 +23,7 @@ export function HeaderFor({ user }: { user: User }) {
       <AppHeader
         role="business"
         account={{ name, subtitle: "Business account", initials: initialsOf(name) }}
+        actions={<SignOutButton />}
       />
     );
   }
@@ -30,6 +33,7 @@ export function HeaderFor({ user }: { user: User }) {
     <AppHeader
       role="student"
       account={{ name, subtitle: student?.university ?? "", initials: initialsOf(name) }}
+      actions={<SignOutButton />}
     />
   );
 }

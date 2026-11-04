@@ -6,7 +6,7 @@ import { BlindShortlist } from "@/components/applications/BlindShortlist";
 import { RoleGate } from "@/components/demo/RoleGate";
 import { AppHeader, Chip, Icon } from "@/components/ui";
 import { applicationsForTask, forBusiness } from "@/lib/applications";
-import { getCurrentUser } from "@/lib/auth";
+import { requireUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { rankApplicants } from "@/lib/shortlist";
 
@@ -15,7 +15,7 @@ import { rankApplicants } from "@/lib/shortlist";
 async function Shortlist({ params }: { params: Promise<{ id: string }> }) {
   await connection();
   const { id } = await params;
-  const user = await getCurrentUser();
+  const user = await requireUser();
   if (user.role !== "business") return <RoleGate role="business">{null}</RoleGate>;
   const businessId = db.businesses.find((b) => b.userId === user.id)?.id;
   const task = db.tasks.find((t) => t.id === id && t.businessId === businessId);

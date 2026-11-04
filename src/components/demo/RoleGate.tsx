@@ -4,12 +4,12 @@
 import type { ReactNode } from "react";
 import { connection } from "next/server";
 
-import { displayName, getCurrentUser } from "@/lib/auth";
+import { displayName, requireUser } from "@/lib/auth";
 import type { Role } from "@/types";
 
 export async function RoleGate({ role, children }: { role: Role; children: ReactNode }) {
   await connection();
-  const user = await getCurrentUser();
+  const user = await requireUser();
   if (user.role === role) return <>{children}</>;
 
   return (

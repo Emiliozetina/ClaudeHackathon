@@ -1,11 +1,11 @@
-import { getCurrentUser } from "@/lib/auth";
+import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import type { Student, Task } from "@/types";
 
-/** The student profile of the current (demo) user, if they are a student. */
+/** The student profile of the signed-in user, if they are a student. */
 export async function currentStudent(): Promise<Student | undefined> {
-  const user = await getCurrentUser();
-  return db.students.find((s) => s.userId === user.id);
+  const user = await currentUser();
+  return user ? db.students.find((s) => s.userId === user.id) : undefined;
 }
 
 export function initials(name: string): string {
