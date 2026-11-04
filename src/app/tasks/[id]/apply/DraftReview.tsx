@@ -68,7 +68,7 @@ export function DraftReview({
             <div className="flex items-center gap-[8px]">
               <span className="type-label-sm flex items-center gap-[6px] rounded-pill bg-navy-900 py-[5px] pl-[10px] pr-[12px] text-text-inverse">
                 <Icon name="spark-f2a541-14" />
-                Drafted by Claude from your CV
+                Drafted from your profile
               </span>
               <Button variant="ghost" onClick={() => setEditing((v) => !v)}>
                 {editing ? "Done" : "Edit"}
@@ -160,7 +160,7 @@ export function DraftReview({
         <p className="flex items-start gap-[8px] rounded-md bg-navy-50 p-[12px]">
           <Icon name="lock-5b6472-16" className="mt-[2px] shrink-0" />
           <span className="type-caption text-text-secondary">
-            The business sees your application was drafted with Claude and checked and sent by you.
+            Nothing is sent until you check it and press send.
           </span>
         </p>
       </form>

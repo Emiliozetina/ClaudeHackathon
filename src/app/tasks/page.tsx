@@ -109,8 +109,8 @@ async function TaskFeed({ searchParams }: { searchParams: SearchParams }) {
             <Icon name="user-white-20" />
           </span>
           <p className="type-label flex-1 text-teal-800">
-            Claude drafted {drafts.length} application{drafts.length === 1 ? "" : "s"} for tasks
-            that match you
+            Drafts from your profile are ready for {drafts.length} matching task
+            {drafts.length === 1 ? "" : "s"}
           </p>
           <p className="type-body-sm text-teal-800">Review and send — nothing goes without your OK</p>
           <Button variant="secondary" href={`/tasks/${drafts[0]!.id}/apply`}>

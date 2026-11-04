@@ -99,7 +99,7 @@ async function ReviewApplication({ params }: { params: Promise<{ id: string }> }
           <Icon name="bell-f2a541-20" />
         </span>
         <div className="flex min-w-0 flex-1 flex-col gap-[2px]">
-          <p className="type-label text-text-inverse">Claude drafted an application for you</p>
+          <p className="type-label text-text-inverse">An application was drafted from your profile</p>
           <p className="type-caption text-navy-100">
             {task.title} · {businessName} · you meet {match.required} of {match.requiredTotal}{" "}
             requirements
@@ -138,7 +138,7 @@ async function ReviewApplication({ params }: { params: Promise<{ id: string }> }
                     detail={
                       ok
                         ? "On your profile — skills section"
-                        : "Not on your profile, so Claude left it out. If you can do it, add it yourself."
+                        : "Not on your profile, so the draft leaves it out. If you can do it, add it yourself."
                     }
                   />
                 );
