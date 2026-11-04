@@ -77,7 +77,6 @@ const icons = {
   "shield-16774a-14": 14,
   "shield-5b6472-16": 16,
   "sliders-111827-18": 18,
-  "spark-f2a541-14": 14,
   "star-f2a541-32": 32,
   "target-0e7c7b-20": 20,
   "target-0e7c7b-24": 24,
