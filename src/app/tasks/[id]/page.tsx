@@ -2,21 +2,33 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { connection } from "next/server";
+import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { formatPay } from "@/lib/tasks";
 
 async function TaskDetail({ params }: { params: Promise<{ id: string }> }) {
   await connection();
   const { id } = await params;
-  const task = db.tasks.find((t) => t.id === id && t.status === "open");
+  // Open tasks are visible signed out too.
+  const user = await currentUser();
+  const business = (taskBusinessId: string) => db.businesses.find((b) => b.id === taskBusinessId);
+  const found = db.tasks.find((t) => t.id === id);
+  // Open tasks are public; the owner can also see their drafts and filled tasks.
+  const isOwner = !!found && !!user && business(found.businessId)?.userId === user.id;
+  const task = found && (found.status === "open" || isOwner) ? found : undefined;
   if (!task) notFound();
-  const business = db.businesses.find((b) => b.id === task.businessId);
+  const owner = business(task.businessId);
+  const studentId = user ? db.students.find((s) => s.userId === user.id)?.id : undefined;
+  const myApplication = studentId
+    ? db.applications.find((a) => a.taskId === task.id && a.studentId === studentId && a.status !== "withdrawn")
+    : undefined;
 
   return (
     <>
       <h1 className="text-2xl font-semibold tracking-tight">{task.title}</h1>
       <p className="mt-1 text-sm text-black/60 dark:text-white/60">
-        {business?.name} · {task.remote ? "Remote" : task.location}
+        {owner?.name} · {task.remote ? "Remote" : task.location}
+        {task.status !== "open" ? ` · ${task.status}` : ""}
       </p>
 
       <dl className="mt-6 grid gap-5 text-sm">
@@ -58,12 +70,25 @@ async function TaskDetail({ params }: { params: Promise<{ id: string }> }) {
         </div>
       </dl>
 
-      <Link
-        href={`/tasks/${task.id}/apply`}
-        className="mt-8 inline-block rounded border px-4 py-2 text-sm font-medium"
-      >
-        Apply
-      </Link>
+      {isOwner ? (
+        <Link
+          href={`/dashboard/business/tasks/${task.id}/applicants`}
+          className="mt-8 inline-block rounded border px-4 py-2 text-sm font-medium"
+        >
+          Review applicants
+        </Link>
+      ) : myApplication ? (
+        <p role="status" className="mt-8 text-sm font-medium">
+          You applied to this task. Status: {myApplication.status}.
+        </p>
+      ) : user?.role === "student" && task.status === "open" ? (
+        <Link
+          href={`/tasks/${task.id}/apply`}
+          className="mt-8 inline-block rounded border px-4 py-2 text-sm font-medium"
+        >
+          Apply
+        </Link>
+      ) : null}
     </>
   );
 }

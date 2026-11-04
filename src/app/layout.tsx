@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import { Inter, Plus_Jakarta_Sans } from "next/font/google";
+import { Suspense } from "react";
+
+import { DemoUserSwitcher } from "@/components/engagements/DemoUserSwitcher";
 import "./globals.css";
 
 // Figma: Inter for UI & body text, Plus Jakarta Sans for headings.
@@ -25,7 +28,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${inter.variable} ${plusJakartaSans.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <Suspense fallback={null}>
+          <DemoUserSwitcher />
+        </Suspense>
+        {children}
+      </body>
     </html>
   );
 }

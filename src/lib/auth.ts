@@ -102,9 +102,14 @@ export async function signOut(): Promise<void> {
 export const DEMO_USER_COOKIE = "demoUserId";
 
 /**
+ * Who you are before touching the switcher. Amy (student) has engagements,
+ * threads and reviews in the seed, so every demo screen has data on first load.
+ */
+export const DEFAULT_DEMO_USER_ID = "u-stu-1";
+
+/**
  * Demo auth lets anyone act as any seed user without a password (the
- * `demoUserId` cookie set by the "acting as" switcher, or the first seed user
- * by default). A real session always wins over it. It is always on in
+ * `demoUserId` cookie set by the "acting as" switcher, or DEFAULT_DEMO_USER_ID). A real session always wins over it. It is always on in
  * development; in production it only runs when DEMO_AUTH=true. Set that ONLY
  * on the demo deployment, and never put real user data in it.
  */
@@ -114,7 +119,12 @@ export function demoAuthEnabled(): boolean {
 
 function demoUser(demoUserId: string | undefined): User | null {
   if (!demoAuthEnabled()) return null;
-  return store.users.find((u) => u.id === demoUserId) ?? store.users[0] ?? null;
+  return (
+    store.users.find((u) => u.id === demoUserId) ??
+    store.users.find((u) => u.id === DEFAULT_DEMO_USER_ID) ??
+    store.users[0] ??
+    null
+  );
 }
 
 // ---------------------------------------------------------------------------

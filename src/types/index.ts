@@ -111,7 +111,6 @@ export interface Application {
   studentId: ID;
   note: string;
   status: ApplicationStatus;
-  anonymous: boolean;
   submittedAt: string;
 }
 

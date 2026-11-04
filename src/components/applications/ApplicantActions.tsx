@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { DEV_BUSINESS_HEADERS } from "@/lib/dev-actor";
 
 type Action = "shortlisted" | "rejected" | "chosen";
 
@@ -17,11 +16,17 @@ export function ApplicantActions({ applicationId }: { applicationId: string }) {
     setError(null);
     const res = await fetch(`/api/applications/${applicationId}`, {
       method: "PATCH",
-      headers: { "content-type": "application/json", ...DEV_BUSINESS_HEADERS },
+      headers: { "content-type": "application/json" },
       body: JSON.stringify({ status }),
     });
     setBusy(false);
     if (res.ok) {
+      const body = await res.json().catch(() => null);
+      const engagementId: unknown = body?.data?.engagementId;
+      if (status === "chosen" && typeof engagementId === "string") {
+        router.push(`/engagements/${engagementId}`);
+        return;
+      }
       router.refresh();
       return;
     }

@@ -7,7 +7,10 @@ import { getActor } from "@/lib/session";
 
 type Ctx = { params: Promise<{ id: string }> };
 
-const DOMAIN_STATUS = { bad_request: 400, unauthorized: 401, forbidden: 403, not_found: 404 } as const;
+// The errors thrown while choosing an applicant are all state conflicts (the
+// application isn't open any more, the task is filled...), so they are 409,
+// like the other conflicts in this file.
+const DOMAIN_STATUS = { bad_request: 409, unauthorized: 401, forbidden: 403, not_found: 404 } as const;
 
 /**
  * PATCH /api/applications/:id  { status }
@@ -36,8 +39,9 @@ export async function PATCH(req: Request, { params }: Ctx) {
     if (app.studentId !== actor.profileId) return fail(404, "Application not found");
     if (status !== "withdrawn")
       return fail(403, "Students can only withdraw an application");
-    if (app.status === "chosen")
-      return fail(409, "A chosen application can't be withdrawn here");
+    // Only a live application (submitted or shortlisted) can be withdrawn.
+    if (app.status !== "submitted" && app.status !== "shortlisted")
+      return fail(409, `A ${app.status} application can't be withdrawn`);
     app.status = "withdrawn";
     return ok(app);
   }
@@ -46,7 +50,8 @@ export async function PATCH(req: Request, { params }: Ctx) {
     return fail(404, "Application not found");
   if (!["shortlisted", "rejected", "chosen"].includes(status))
     return fail(400, "status must be shortlisted, rejected or chosen");
-  if (app.status === "withdrawn" || app.status === "chosen")
+  // Only a live application can change: a rejected one can't be brought back.
+  if (app.status !== "submitted" && app.status !== "shortlisted")
     return fail(409, `Application is already ${app.status}`);
   if (task.status !== "open")
     return fail(409, "This task is no longer open");
@@ -57,7 +62,8 @@ export async function PATCH(req: Request, { params }: Ctx) {
     const businessUserId = db.businesses.find((b) => b.id === task.businessId)?.userId;
     const user = db.users.find((u) => u.id === businessUserId);
     try {
-      createEngagementFromApplication(app.id, user);
+      const engagement = createEngagementFromApplication(app.id, user);
+      return ok({ ...forBusiness(app), engagementId: engagement.id });
     } catch (error) {
       if (error instanceof DomainError) return fail(DOMAIN_STATUS[error.code], error.message);
       throw error;

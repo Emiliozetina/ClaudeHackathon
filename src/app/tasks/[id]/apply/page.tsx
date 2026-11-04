@@ -1,9 +1,14 @@
 import { Suspense } from "react";
 import { ApplyForm } from "@/components/applications/ApplyForm";
+import { RoleGate } from "@/components/demo/RoleGate";
 
 async function ApplyFormLoader({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  return <ApplyForm taskId={id} />;
+  return (
+    <RoleGate role="student">
+      <ApplyForm taskId={id} />
+    </RoleGate>
+  );
 }
 
 export default function ApplyPage({ params }: { params: Promise<{ id: string }> }) {
