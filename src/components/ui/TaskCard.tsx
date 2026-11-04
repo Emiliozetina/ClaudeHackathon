@@ -48,7 +48,7 @@ export function TaskCard({
   return (
     <article
       className={cn(
-        "relative flex w-full flex-col items-start gap-[16px] rounded-lg border border-border-subtle bg-surface-card p-[24px] shadow-elevation-1",
+        "relative flex flex-col items-start gap-[16px] rounded-lg border border-border-subtle bg-surface-card p-[24px] shadow-elevation-1",
         className,
       )}
     >
