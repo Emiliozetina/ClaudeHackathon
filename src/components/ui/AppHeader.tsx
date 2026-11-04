@@ -70,12 +70,13 @@ export function AppHeader(props: AppHeaderProps) {
   const tone: AvatarTone = role === "business" ? "navy" : "teal";
 
   return (
-    <header className="flex h-[72px] w-full items-center justify-between border-b border-border-subtle bg-surface-card px-[40px]">
-      <div className="flex items-center gap-[40px]">
+    <header className="flex h-[72px] w-full items-center justify-between border-b border-border-subtle bg-surface-card px-4 md:px-[40px]">
+      <div className="flex min-w-0 items-center gap-[40px]">
         <Link href={homeHref[role]} aria-label="NEXA home">
           <Logo />
         </Link>
-        <nav className="flex items-center gap-[28px]">
+        {/* Nav links are hidden on narrow screens; Figma only has the 1440px layout. */}
+        <nav className="hidden items-center gap-[28px] lg:flex">
           {items.map((item) => (
             <NavLink key={item.href} href={item.href} active={item.href === current}>
               {item.label}
@@ -100,7 +101,7 @@ export function AppHeader(props: AppHeaderProps) {
             </button>
             <div className="flex items-center gap-[10px]">
               <Avatar initials={props.account.initials} tone={tone} size={40} />
-              <div className="flex flex-col whitespace-nowrap">
+              <div className="hidden flex-col whitespace-nowrap md:flex">
                 <span className="type-label text-text-primary">{props.account.name}</span>
                 <span className="type-caption text-text-secondary">{props.account.subtitle}</span>
               </div>
