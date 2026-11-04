@@ -29,8 +29,9 @@ export interface CvWorkItem {
 export interface CvParseResult {
   fileName: string;
   /**
-   * True while `parseCv` is the local mock (no AI is called and the uploaded
-   * file is NOT read). The UI shows a notice whenever this is true.
+   * True when `parseCv` returned the sample instead of calling Claude (no
+   * ANTHROPIC_API_KEY in development, or CV_PARSE_MOCK=true): the uploaded
+   * file was NOT read. The UI shows a notice whenever this is true.
    */
   mock: boolean;
   fields: {
