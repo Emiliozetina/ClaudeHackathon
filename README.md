@@ -20,4 +20,5 @@ ex- Students need to be expert in JavaScript, Students must have used Excel
 
 5. Payment - How will be the payment be
 
+https://www.figma.com/design/OBfTJZbbFtNPameBs4sixt/Untitled?node-id=0-1&t=uvpMwQyvlHH7l4h4-1
 
