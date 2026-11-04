@@ -32,7 +32,7 @@ export function ApplicantRow({
   return (
     <div
       className={cn(
-        "flex w-full items-center gap-[16px] border-b border-border-subtle bg-surface-card px-[20px] py-[16px]",
+        "flex items-center gap-[16px] border-b border-border-subtle bg-surface-card px-[20px] py-[16px]",
         className,
       )}
     >
