@@ -1,8 +1,6 @@
+import { redirect } from "next/navigation";
+
+// Figma has no student dashboard: the student's home is "09 · Find work — task feed".
 export default function StudentDashboardPage() {
-  return (
-    <section className="mx-auto w-full max-w-5xl px-6 py-10">
-      <h1 className="text-2xl font-semibold tracking-tight">Student dashboard</h1>
-      <p className="mt-2 text-sm text-black/60 dark:text-white/60">Your applications, engagements and experience so far.</p>
-    </section>
-  );
+  redirect("/tasks");
 }

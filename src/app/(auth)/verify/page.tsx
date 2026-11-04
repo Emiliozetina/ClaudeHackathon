@@ -64,7 +64,8 @@ export default function VerifyPage() {
   }
 
   const alreadyVerified = !!me?.verifiedAt || done;
-  const dashboard = me?.role === "business" ? "/dashboard/business" : "/dashboard/student";
+  // Students land on the task feed (Figma 09); there is no student dashboard screen.
+  const dashboard = me?.role === "business" ? "/dashboard/business" : "/tasks";
 
   return (
     <AuthCard
