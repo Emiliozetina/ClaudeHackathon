@@ -3,7 +3,7 @@ import { Suspense } from "react";
 
 import { formatDate } from "@/components/engagements/format";
 import { StatusBadge } from "@/components/engagements/StatusBadge";
-import { getCurrentUser } from "@/lib/auth";
+import { requireUser } from "@/lib/auth";
 import { listEngagementsForUser } from "@/lib/engagements";
 
 export default function StudentEngagementsPage() {
@@ -19,7 +19,7 @@ export default function StudentEngagementsPage() {
 }
 
 async function EngagementList() {
-  const user = await getCurrentUser();
+  const user = await requireUser();
   const engagements = listEngagementsForUser(user);
 
   if (engagements.length === 0) {

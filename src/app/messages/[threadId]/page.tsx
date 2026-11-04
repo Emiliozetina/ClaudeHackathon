@@ -5,7 +5,7 @@ import { EngagementPanel } from "@/components/engagements/EngagementPanel";
 import { AutoRefresh } from "@/components/messaging/AutoRefresh";
 import { toThreadListItems } from "@/components/messaging/toThreadListItems";
 import { Avatar, Chip } from "@/components/ui";
-import { getCurrentUser } from "@/lib/auth";
+import { requireUser } from "@/lib/auth";
 import { cn } from "@/lib/cn";
 import { getEngagementForUser, type EngagementView } from "@/lib/engagements";
 import { DomainError } from "@/lib/errors";
@@ -45,7 +45,7 @@ export default function MessageThreadPage({ params }: PageProps<"/messages/[thre
 }
 
 async function Conversation({ threadId }: { threadId: string }) {
-  const user = await getCurrentUser();
+  const user = await requireUser();
   const threads = toThreadListItems(listThreadsForUser(user));
 
   let thread: ThreadDetail;

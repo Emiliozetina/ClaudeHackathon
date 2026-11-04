@@ -7,7 +7,7 @@ import { Avatar, Chip, Icon } from "@/components/ui";
 import type { AvatarTone, ChipType } from "@/components/ui";
 import { applicationsForTask, forBusiness, type ApplicationForBusiness } from "@/lib/applications";
 import { RoleGate } from "@/components/demo/RoleGate";
-import { getCurrentUser } from "@/lib/auth";
+import { requireUser } from "@/lib/auth";
 import { cn } from "@/lib/cn";
 import { db } from "@/lib/db";
 import { mentions } from "@/lib/shortlist";
@@ -39,8 +39,7 @@ async function Applicants({ params, searchParams }: { params: Promise<{ id: stri
   await connection();
   const { id } = await params;
   const { a: selectedId, tab = "all" } = await searchParams;
-  // TODO(auth): getCurrentUser is the shared demo stub until #1 lands.
-  const user = await getCurrentUser();
+  const user = await requireUser();
   if (user.role !== "business") return <RoleGate role="business">{null}</RoleGate>;
   const businessId = db.businesses.find((b) => b.userId === user.id)?.id;
   const task = db.tasks.find((t) => t.id === id && t.businessId === businessId);

@@ -77,9 +77,14 @@ export default function StudentProfileEditPage() {
           <h1 className="type-h2 text-text-primary">Your profile</h1>
           <p className="type-body text-text-secondary">Skills, CV, availability, motivations and goals.</p>
         </div>
-        <Button href="/cv" showArrow>
-          Import from your CV
-        </Button>
+        <div className="flex flex-wrap gap-3">
+          <Button href="/dashboard/student/profile/edit" variant="secondary">
+            Edit profile
+          </Button>
+          <Button href="/cv" showArrow>
+            Import from your CV
+          </Button>
+        </div>
       </div>
       <Suspense fallback={<p className="type-body text-text-secondary">Loading your profile…</p>}>
         <ProfileSummary />

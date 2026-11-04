@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { connection } from "next/server";
 import { Avatar, Button, Chip, Icon, type IconName } from "@/components/ui";
 import { HeaderFor } from "@/app/students/[id]/student-header";
-import { getCurrentUser } from "@/lib/auth";
+import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { formatPay } from "@/lib/tasks";
 import {
@@ -71,11 +71,12 @@ function SkillBox({ chip, children }: { chip: ReactNode; children: ReactNode }) 
 async function TaskDetail({ params }: { params: Promise<{ id: string }> }) {
   await connection();
   const { id } = await params;
-  const user = await getCurrentUser();
+  // Open tasks are visible signed out too.
+  const user = await currentUser();
   const found = db.tasks.find((t) => t.id === id);
   // Open tasks are public; the owner can also see their drafts and filled tasks.
   const isOwner =
-    !!found && db.businesses.find((b) => b.id === found.businessId)?.userId === user.id;
+    !!found && !!user && db.businesses.find((b) => b.id === found.businessId)?.userId === user.id;
   const task = found && (found.status === "open" || isOwner) ? found : undefined;
   if (!task) notFound();
   const business = db.businesses.find((b) => b.id === task.businessId);
@@ -246,7 +247,7 @@ async function TaskDetail({ params }: { params: Promise<{ id: string }> }) {
               View my applications
             </Button>
           </SidePanel>
-        ) : user.role === "student" && task.status === "open" ? (
+        ) : user?.role === "student" && task.status === "open" ? (
           <ApplyPanel
             taskId={task.id}
             businessName={businessName}
@@ -271,7 +272,7 @@ async function TaskDetail({ params }: { params: Promise<{ id: string }> }) {
 }
 
 async function Header() {
-  return <HeaderFor user={await getCurrentUser()} />;
+  return <HeaderFor user={await currentUser()} />;
 }
 
 export default function TaskDetailPage({ params }: { params: Promise<{ id: string }> }) {

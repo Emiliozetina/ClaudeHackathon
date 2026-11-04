@@ -2,7 +2,7 @@ import { Suspense } from "react";
 
 import { AutoRefresh } from "@/components/messaging/AutoRefresh";
 import { toThreadListItems } from "@/components/messaging/toThreadListItems";
-import { getCurrentUser } from "@/lib/auth";
+import { requireUser } from "@/lib/auth";
 import { listThreadsForUser } from "@/lib/messages";
 
 import { CurrentUserHeader } from "@/components/layout/CurrentUserHeader";
@@ -25,7 +25,7 @@ export default function MessagesPage() {
 }
 
 async function Inbox() {
-  const user = await getCurrentUser();
+  const user = await requireUser();
   const threads = listThreadsForUser(user);
 
   return (
