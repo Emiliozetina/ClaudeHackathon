@@ -128,10 +128,10 @@ Fields:
 - university: if it is one of ${list(UNIVERSITIES)}, use that exact name; otherwise write it as the CV does.
 - fieldOfStudy: the degree and subject, e.g. "BA (Hons) Marketing".
 - yearOfStudy: one of ${list(YEARS_OF_STUDY)}, only if the CV states the year or gives course dates that make it unambiguous. Otherwise null.
-- skills: short skill names (e.g. "Canva", "Excel", "Customer service"), at most 12, taken from a skills section or clearly shown in roles.
+- skills: short skill names (e.g. "Canva", "Excel", "Customer service"), at most 12. Only skills the CV names, in a skills section or in role descriptions; don't turn duties into new skill names.
 - workHistory: jobs, volunteering and society roles, most recent first. startDate and endDate as "YYYY-MM"; if only a year is given use "YYYY-01". endDate is null if the role is current or no end is given. If there are no roles, value is null.
-- motivations: why the student wants work experience, only if the CV has a personal statement or profile saying so.
-- goals: career goals, only if the CV states them.
+- motivations: why the student wants work experience, only if the CV has a personal statement or profile saying so. Keep the student's own first-person words, lightly trimmed; don't summarise in the third person.
+- goals: career goals, only if the CV states them, in the student's own first-person words.
 - availability: one of ${list(AVAILABILITY_OPTIONS)}, only if the CV states weekly availability. Otherwise null.`;
 
 const MONTH = /^\d{4}-(0[1-9]|1[0-2])$/;
