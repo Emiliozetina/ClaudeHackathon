@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Button, Checkbox, Input } from "@/components/ui";
+import { Button, Checkbox, Icon, Input } from "@/components/ui";
 import { formatRange } from "@/lib/cv/format";
 import type { StudentDetails } from "@/lib/cv/types";
-import { IconBriefcase, IconPencil, IconPlus, IconTrash } from "./CvIcons";
+
 
 type Role = StudentDetails["workHistory"][number];
 type Draft = { title: string; organisation: string; startDate: string; endDate: string };
@@ -79,8 +79,8 @@ export function WorkHistoryEditor({
               key={role.id}
               className="flex items-center gap-3.5 rounded-md border border-border-default bg-surface-card p-3.5"
             >
-              <span className="flex size-10 shrink-0 items-center justify-center rounded-md bg-teal-50 text-teal-700">
-                <IconBriefcase className="size-5" />
+              <span className="flex size-9 shrink-0 items-center justify-center rounded-md bg-teal-50">
+                <Icon name="briefcase-0b2545-18" />
               </span>
               <div className="flex min-w-0 flex-1 flex-col">
                 <p className="type-label truncate text-text-primary">{role.title}</p>
@@ -94,7 +94,7 @@ export function WorkHistoryEditor({
                 onClick={() => open(role)}
                 className="rounded-sm p-1.5 text-text-secondary hover:text-teal-700 focus-visible:outline-2 focus-visible:outline-teal-700"
               >
-                <IconPencil className="size-[18px]" />
+                <Icon name="edit-5b6472-18" />
               </button>
               <button
                 type="button"
@@ -102,7 +102,7 @@ export function WorkHistoryEditor({
                 onClick={() => onChange(roles.filter((r) => r.id !== role.id))}
                 className="rounded-sm p-1.5 text-text-secondary hover:text-status-error focus-visible:outline-2 focus-visible:outline-teal-700"
               >
-                <IconTrash className="size-[18px]" />
+                <Icon name="trash-5b6472-18" />
               </button>
             </li>
           ),
@@ -158,7 +158,7 @@ export function WorkHistoryEditor({
           onClick={() => open()}
           className="type-label inline-flex items-center justify-center gap-2 rounded-md border border-dashed border-teal-700 px-4 py-3.5 text-teal-700 hover:bg-teal-50 focus-visible:outline-2 focus-visible:outline-teal-700"
         >
-          <IconPlus className="size-[18px]" />
+          <Icon name="plus-0e7c7b-18" />
           Add work experience
         </button>
       )}
