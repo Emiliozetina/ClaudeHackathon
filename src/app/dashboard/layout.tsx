@@ -1,9 +1,6 @@
 import type { ReactNode } from "react";
 
-/**
- * Dashboard pages render their own app header and page width (Figma screens are
- * full-bleed at 1440px), so this layout only passes children through.
- */
+// Each dashboard page renders its own App header and page layout (Figma screens 06, 09, 11, 14).
 export default function DashboardLayout({ children }: { children: ReactNode }) {
   return <div className="flex w-full flex-1 flex-col">{children}</div>;
 }
