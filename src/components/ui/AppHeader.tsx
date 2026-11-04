@@ -106,7 +106,7 @@ export function AppHeader(props: AppHeaderProps) {
           </>
         ) : (
           <>
-            {role === "business" && <Button href="/tasks/new">Post a task</Button>}
+            {role === "business" && <Button href="/tasks/new/describe">Post a task</Button>}
             <button type="button" className="shrink-0 rounded-pill" aria-label="Notifications">
               <Icon name="notifications" />
             </button>
