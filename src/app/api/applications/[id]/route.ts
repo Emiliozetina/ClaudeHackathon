@@ -1,18 +1,21 @@
 import { forBusiness } from "@/lib/applications";
 import { db } from "@/lib/db";
+import { createEngagementFromApplication } from "@/lib/engagements";
+import { DomainError } from "@/lib/errors";
 import { fail, ok, readJson } from "@/lib/http";
 import { getActor } from "@/lib/session";
 
 type Ctx = { params: Promise<{ id: string }> };
+
+const DOMAIN_STATUS = { bad_request: 400, forbidden: 403, not_found: 404 } as const;
 
 /**
  * PATCH /api/applications/:id  { status }
  *  - business (owner of the task): "shortlisted" | "rejected" | "chosen"
  *  - student (owner of the application): "withdrawn"
  *
- * Choosing an applicant marks the task "filled" and rejects everyone else.
- * Creating the engagement for the chosen student belongs to the Engagements
- * work (api/engagements) and should hook in at the marked point below.
+ * Choosing an applicant marks the task "filled", rejects everyone else and
+ * opens the engagement (src/lib/engagements.ts).
  */
 export async function PATCH(req: Request, { params }: Ctx) {
   const { id } = await params;
@@ -49,17 +52,16 @@ export async function PATCH(req: Request, { params }: Ctx) {
     return fail(409, "This task is no longer open");
 
   if (status === "chosen") {
-    app.status = "chosen";
-    for (const other of db.applications) {
-      if (
-        other.taskId === task.id &&
-        other.id !== app.id &&
-        (other.status === "submitted" || other.status === "shortlisted")
-      )
-        other.status = "rejected";
+    // Chooses the applicant, declines the others, fills the task and opens
+    // the engagement with its message thread, all validated in one place.
+    const businessUserId = db.businesses.find((b) => b.id === task.businessId)?.userId;
+    const user = db.users.find((u) => u.id === businessUserId);
+    try {
+      createEngagementFromApplication(app.id, user);
+    } catch (error) {
+      if (error instanceof DomainError) return fail(DOMAIN_STATUS[error.code], error.message);
+      throw error;
     }
-    task.status = "filled";
-    // TODO(engagements): create the engagement for this task + student here.
   } else {
     app.status = status as "shortlisted" | "rejected";
   }
