@@ -106,7 +106,12 @@ export function AppHeader(props: AppHeaderProps) {
           </>
         ) : (
           <>
-            {role === "business" && <Button href="/tasks/new/describe">Post a task</Button>}
+            {/* Hidden on phones, where it would cover the logo. */}
+            {role === "business" && (
+              <Button href="/tasks/new/describe" className="max-sm:hidden">
+                Post a task
+              </Button>
+            )}
             <button type="button" className="shrink-0 rounded-pill" aria-label="Notifications">
               <Icon name="notifications" />
             </button>

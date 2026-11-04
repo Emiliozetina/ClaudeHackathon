@@ -101,7 +101,8 @@ export default function BusinessDashboardPage() {
                 View all
               </Button>
             </div>
-            <div className="overflow-x-auto">
+            {/* relative: keeps the sr-only labels (absolute) inside the scroll box. */}
+            <div className="relative overflow-x-auto">
               <table className="w-full min-w-[640px] text-left">
                 <thead className="bg-navy-50">
                   <tr className="type-overline text-text-secondary">

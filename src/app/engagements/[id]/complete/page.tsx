@@ -131,7 +131,7 @@ function BusinessCheck({ engagement: e }: { engagement: EngagementView }) {
         subtitle="Check the work, release payment and leave a review. Both of you review each other."
       />
 
-      <div className="grid items-start gap-[24px] lg:grid-cols-[minmax(0,756px)_minmax(0,420px)]">
+      <div className="grid grid-cols-1 items-start gap-[24px] lg:grid-cols-[minmax(0,756px)_minmax(0,420px)]">
         <div className="flex flex-col gap-[24px]">
           <section className={card}>
             <h2 className="type-h4 text-text-primary">What was delivered</h2>

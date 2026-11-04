@@ -58,7 +58,7 @@ const PANELS: Record<CvPanel, PanelContent> = {
 export function CvShell({ panel, children }: { panel: CvPanel; children: ReactNode }) {
   const content = PANELS[panel];
   return (
-    <div className="grid min-h-screen flex-1 lg:grid-cols-[560px_1fr]">
+    <div className="grid min-h-screen flex-1 grid-cols-1 lg:grid-cols-[560px_1fr]">
       <aside className="hidden flex-col justify-between bg-teal-800 p-14 lg:flex">
         <Logo theme="dark" className="self-start" />
 
@@ -96,7 +96,7 @@ export function CvShell({ panel, children }: { panel: CvPanel; children: ReactNo
         )}
       </aside>
 
-      <main className="flex bg-surface-card">
+      <main className="flex min-w-0 bg-surface-card">
         <div className="mx-auto my-auto flex w-full max-w-[568px] flex-col px-6 py-12">{children}</div>
       </main>
     </div>

@@ -38,7 +38,7 @@ export function ReviewCard({
         <input type="hidden" name="engagementId" value={engagementId} />
         <fieldset
           disabled={pending}
-          className="flex flex-col gap-[20px] rounded-lg border border-border-subtle bg-surface-card p-[28px]"
+          className="min-w-0 flex flex-col gap-[20px] rounded-lg border border-border-subtle bg-surface-card p-[28px]"
         >
           <legend className="sr-only">Review {subjectName}</legend>
           <h2 aria-hidden className="type-h4 text-text-primary">
