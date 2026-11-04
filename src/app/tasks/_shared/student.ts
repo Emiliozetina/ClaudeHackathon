@@ -1,21 +1,11 @@
-import { cookies } from "next/headers";
-import type { HeaderAccount } from "@/components/ui";
-import { DEMO_USER_COOKIE } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { DEV_STUDENT_HEADERS } from "@/lib/dev-actor";
 import type { Student, Task } from "@/types";
 
-/**
- * The student viewing the task pages. Mirrors getActor(): the demo-user cookie
- * when it points at a student, otherwise the dev student that the apply forms
- * send in their headers.
- */
+/** The student profile of the current (demo) user, if they are a student. */
 export async function currentStudent(): Promise<Student | undefined> {
-  const userId = (await cookies()).get(DEMO_USER_COOKIE)?.value;
-  return (
-    db.students.find((s) => s.userId === userId) ??
-    db.students.find((s) => s.id === DEV_STUDENT_HEADERS["x-dev-profile-id"])
-  );
+  const user = await getCurrentUser();
+  return db.students.find((s) => s.userId === user.id);
 }
 
 export function initials(name: string): string {
@@ -25,12 +15,6 @@ export function initials(name: string): string {
     .slice(0, 2)
     .map((w) => w[0]!.toUpperCase())
     .join("");
-}
-
-export function headerAccount(student: Student | undefined): HeaderAccount {
-  return student
-    ? { name: student.name, subtitle: student.university, initials: initials(student.name) }
-    : { name: "Student", subtitle: "Not signed in", initials: "?" };
 }
 
 const norm = (s: string) => s.trim().toLowerCase();

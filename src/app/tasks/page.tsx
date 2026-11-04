@@ -1,12 +1,13 @@
 import { Suspense } from "react";
 import { connection } from "next/server";
-import { AppHeader, Button, Checkbox, Icon, TaskCard } from "@/components/ui";
+import { Button, Checkbox, Icon, TaskCard } from "@/components/ui";
+import { HeaderFor } from "@/app/students/[id]/student-header";
+import { getCurrentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { formatPay, listOpenTasks } from "@/lib/tasks";
 import {
   currentStudent,
   durationLabel,
-  headerAccount,
   initials,
   postedLabel,
   skillMatch,
@@ -244,7 +245,7 @@ async function TaskFeed({ searchParams }: { searchParams: SearchParams }) {
 }
 
 async function Header() {
-  return <AppHeader role="student" account={headerAccount(await currentStudent())} />;
+  return <HeaderFor user={await getCurrentUser()} />;
 }
 
 export default function TasksPage({ searchParams }: { searchParams: SearchParams }) {

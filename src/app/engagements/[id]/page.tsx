@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { Suspense } from "react";
 
-import { DemoUserSwitcher } from "@/components/engagements/DemoUserSwitcher";
 import { EngagementPanel } from "@/components/engagements/EngagementPanel";
 import { formatDate } from "@/components/engagements/format";
 import { loadEngagement } from "@/components/engagements/load";
@@ -11,9 +10,6 @@ import { StatusBadge } from "@/components/engagements/StatusBadge";
 export default function EngagementPage({ params }: PageProps<"/engagements/[id]">) {
   return (
     <section className="mx-auto w-full max-w-5xl px-6 py-10">
-      <Suspense fallback={null}>
-        <DemoUserSwitcher />
-      </Suspense>
       <h1 className="mt-6 text-2xl font-semibold tracking-tight">Do the task together</h1>
       <p className="mt-2 text-sm text-black/60 dark:text-white/60">Agreed dates and scope, check-ins and shared files.</p>
       <Suspense fallback={<p className="mt-6 text-sm text-black/60 dark:text-white/60">Loading engagement...</p>}>

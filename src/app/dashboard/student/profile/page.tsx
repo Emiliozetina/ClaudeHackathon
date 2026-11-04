@@ -1,5 +1,4 @@
 import { Suspense } from "react";
-import { DemoUserSwitcher } from "@/components/engagements/DemoUserSwitcher";
 import { getCurrentUser } from "@/lib/auth";
 import { store } from "@/lib/store";
 import { StudentPortfolio } from "@/app/students/[id]/StudentPortfolio";
@@ -26,9 +25,8 @@ async function MyPortfolio() {
         <main className="mx-auto flex w-full max-w-[1240px] flex-col gap-[16px] px-[20px] pt-[40px] pb-[80px]">
           <h1 className="type-h2 text-text-primary">Portfolio</h1>
           <p className="type-body text-text-secondary">
-            Portfolios belong to student accounts. Switch to a student to see theirs.
+            Portfolios belong to student accounts. Pick a student in the demo bar at the top of the page.
           </p>
-          <DemoUserSwitcher />
         </main>
       )}
     </>

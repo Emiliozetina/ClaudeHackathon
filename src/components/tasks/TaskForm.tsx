@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { DEV_BUSINESS_HEADERS } from "@/lib/dev-actor";
 
 const lines = (s: string) => s.split("\n").map((l) => l.trim()).filter(Boolean);
 
@@ -36,12 +35,16 @@ export function TaskForm() {
     setErrors([]);
     const res = await fetch("/api/tasks", {
       method: "POST",
-      headers: { "content-type": "application/json", ...DEV_BUSINESS_HEADERS },
+      headers: { "content-type": "application/json" },
       body: JSON.stringify(payload),
     });
     setBusy(false);
     if (res.ok) {
-      router.push("/dashboard/business/tasks");
+      // The business task list is still a stub (#17); the applicants page is
+      // the owner's real view of a new task.
+      const body = await res.json().catch(() => null);
+      const taskId: unknown = body?.data?.id;
+      router.push(typeof taskId === "string" ? `/dashboard/business/tasks/${taskId}/applicants` : "/tasks");
       return;
     }
     const body = await res.json().catch(() => null);

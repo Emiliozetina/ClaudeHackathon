@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Checkbox, Icon, fieldClassName } from "@/components/ui";
-import { DEV_STUDENT_HEADERS } from "@/lib/dev-actor";
 
 export type DraftParagraph = { text: string; source: string };
 
@@ -45,12 +44,14 @@ export function DraftReview({
     const note = [message.trim(), draft.trim()].filter(Boolean).join("\n\n");
     const res = await fetch("/api/applications", {
       method: "POST",
-      headers: { "content-type": "application/json", ...DEV_STUDENT_HEADERS },
+      headers: { "content-type": "application/json" },
       body: JSON.stringify({ taskId, note }),
     });
     setBusy(false);
     if (res.ok) {
-      router.push("/dashboard/student/applications");
+      // Same as ApplyForm: back to the task, which shows the application status.
+      router.push(`/tasks/${taskId}`);
+      router.refresh();
       return;
     }
     const body = await res.json().catch(() => null);

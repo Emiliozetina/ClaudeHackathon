@@ -1,7 +1,10 @@
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { connection } from "next/server";
-import { AppHeader, Avatar, Icon } from "@/components/ui";
+import { Avatar, Icon } from "@/components/ui";
+import { RoleGate } from "@/components/demo/RoleGate";
+import { HeaderFor } from "@/app/students/[id]/student-header";
+import { getCurrentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { formatPay } from "@/lib/tasks";
 import type { Student, Task } from "@/types";
@@ -9,7 +12,6 @@ import {
   currentStudent,
   durationLabel,
   hasSkill,
-  headerAccount,
   initials,
   skillMatch,
   withinDays,
@@ -152,7 +154,7 @@ async function ReviewApplication({ params }: { params: Promise<{ id: string }> }
 }
 
 async function Header() {
-  return <AppHeader role="student" account={headerAccount(await currentStudent())} />;
+  return <HeaderFor user={await getCurrentUser()} />;
 }
 
 export default function ApplyPage({ params }: { params: Promise<{ id: string }> }) {
@@ -163,7 +165,9 @@ export default function ApplyPage({ params }: { params: Promise<{ id: string }> 
       </Suspense>
       <main className="mx-auto flex w-full max-w-[1232px] flex-col gap-[24px] px-4 pb-[64px] pt-[32px]">
         <Suspense fallback={<p className="type-body text-text-secondary">Loading…</p>}>
-          <ReviewApplication params={params} />
+          <RoleGate role="student">
+            <ReviewApplication params={params} />
+          </RoleGate>
         </Suspense>
       </main>
     </>

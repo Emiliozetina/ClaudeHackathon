@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Avatar, Button, Checkbox, Icon, fieldClassName } from "@/components/ui";
-import { DEV_STUDENT_HEADERS } from "@/lib/dev-actor";
 
 type ApplyPanelProps = {
   taskId: string;
@@ -18,7 +17,7 @@ type ApplyPanelProps = {
 
 /**
  * Figma 10 → Apply panel (10:1021). Sends the application the same way as
- * ApplyForm: POST /api/applications, then on to the applications list.
+ * ApplyForm: POST /api/applications as the demo user, then back to the task.
  */
 export function ApplyPanel({
   taskId,
@@ -44,12 +43,14 @@ export function ApplyPanel({
       .join("\n\n");
     const res = await fetch("/api/applications", {
       method: "POST",
-      headers: { "content-type": "application/json", ...DEV_STUDENT_HEADERS },
+      headers: { "content-type": "application/json" },
       body: JSON.stringify({ taskId, note: fullNote }),
     });
     setBusy(false);
     if (res.ok) {
-      router.push("/dashboard/student/applications");
+      // Same as ApplyForm: back to the task, which shows the application status.
+      router.push(`/tasks/${taskId}`);
+      router.refresh();
       return;
     }
     const body = await res.json().catch(() => null);

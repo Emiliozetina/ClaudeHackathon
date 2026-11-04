@@ -2,7 +2,6 @@ import Link from "next/link";
 import { Suspense } from "react";
 
 import { createReviewAction, payAndReviewAction } from "@/app/engagements/actions";
-import { DemoUserSwitcher } from "@/components/engagements/DemoUserSwitcher";
 import { formatDate, formatGBP, STATUS_LABELS } from "@/components/engagements/format";
 import { loadEngagement } from "@/components/engagements/load";
 import { NoAccess } from "@/components/engagements/NoAccess";
@@ -28,9 +27,6 @@ export default function CompleteEngagementPage({ params }: PageProps<"/engagemen
         <AccountHeader />
       </Suspense>
       <main className="mx-auto w-full max-w-[1240px] px-[20px] pt-[40px] pb-[80px]">
-        <Suspense fallback={null}>
-          <DemoUserSwitcher />
-        </Suspense>
         <h1 className="sr-only">Sign off, pay and review</h1>
         <Suspense fallback={<p className={`mt-[24px] ${muted}`}>Loading engagement...</p>}>
           {params.then(({ id }) => (

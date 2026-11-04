@@ -2,7 +2,9 @@ import { Suspense, type ReactNode } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { connection } from "next/server";
-import { AppHeader, Avatar, Chip, Icon, type IconName } from "@/components/ui";
+import { Avatar, Button, Chip, Icon, type IconName } from "@/components/ui";
+import { HeaderFor } from "@/app/students/[id]/student-header";
+import { getCurrentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { formatPay } from "@/lib/tasks";
 import {
@@ -10,13 +12,21 @@ import {
   durationLabel,
   formatDate,
   hasSkill,
-  headerAccount,
   initials,
   skillMatch,
 } from "../_shared/student";
 import { ApplyPanel } from "./ApplyPanel";
 
 const card = "rounded-lg border border-border-subtle bg-surface-card p-[32px]";
+
+function SidePanel({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <section className="flex flex-col gap-[16px] rounded-lg border border-border-subtle bg-surface-card p-[28px] shadow-elevation-2">
+      <h2 className="type-h3 text-text-primary">{title}</h2>
+      {children}
+    </section>
+  );
+}
 
 function Fact({ icon, label, value }: { icon: IconName; label: string; value: string }) {
   return (
@@ -61,16 +71,25 @@ function SkillBox({ chip, children }: { chip: ReactNode; children: ReactNode }) 
 async function TaskDetail({ params }: { params: Promise<{ id: string }> }) {
   await connection();
   const { id } = await params;
-  const task = db.tasks.find((t) => t.id === id && t.status === "open");
+  const user = await getCurrentUser();
+  const found = db.tasks.find((t) => t.id === id);
+  // Open tasks are public; the owner can also see their drafts and filled tasks.
+  const isOwner =
+    !!found && db.businesses.find((b) => b.id === found.businessId)?.userId === user.id;
+  const task = found && (found.status === "open" || isOwner) ? found : undefined;
   if (!task) notFound();
   const business = db.businesses.find((b) => b.id === task.businessId);
   const businessName = business?.name ?? "the business";
   const student = await currentStudent();
+  const myApplication = student
+    ? db.applications.find(
+        (a) => a.taskId === task.id && a.studentId === student.id && a.status !== "withdrawn",
+      )
+    : undefined;
   const match = skillMatch(student, task);
 
   const hired = db.engagements.filter((e) => e.businessId === task.businessId).length;
   const applications = db.applications.filter((a) => a.taskId === task.id && a.status !== "withdrawn");
-  const alreadyApplied = applications.some((a) => a.studentId === student?.id);
 
   const matchTitle = match.meetsAllRequired
     ? "Strong match"
@@ -120,7 +139,10 @@ async function TaskDetail({ params }: { params: Promise<{ id: string }> }) {
             </div>
           </div>
 
-          <h1 className="type-h1 text-text-primary">{task.title}</h1>
+          <div className="flex flex-wrap items-center gap-[12px]">
+            <h1 className="type-h1 text-text-primary">{task.title}</h1>
+            {task.status !== "open" && <Chip type="neutral">{task.status}</Chip>}
+          </div>
 
           <div className="flex flex-wrap gap-[12px]">
             <Fact
@@ -206,30 +228,50 @@ async function TaskDetail({ params }: { params: Promise<{ id: string }> }) {
       </div>
 
       <div className="w-full shrink-0 lg:sticky lg:top-[24px] lg:w-[440px]">
-        <ApplyPanel
-          taskId={task.id}
-          businessName={businessName}
-          student={
-            student
-              ? {
-                  name: student.name,
-                  initials: initials(student.name),
-                  cvFileName: student.cvUrl?.split("/").pop(),
-                }
-              : undefined
-          }
-          match={{ title: matchTitle, detail: matchDetail }}
-          startLabel={formatDate(task.startDate, false)}
-          appliedCount={applications.length}
-          alreadyApplied={alreadyApplied}
-        />
+        {isOwner ? (
+          <SidePanel title="Your task">
+            <p className="type-body-sm text-text-secondary">
+              {applications.length} application{applications.length === 1 ? "" : "s"} so far.
+            </p>
+            <Button href={`/dashboard/business/tasks/${task.id}/applicants`} size="lg" showArrow className="w-full">
+              Review applicants
+            </Button>
+          </SidePanel>
+        ) : myApplication ? (
+          <SidePanel title="You applied">
+            <p role="status" className="type-body-sm text-text-secondary">
+              You applied to this task. Status: <Chip type="teal">{myApplication.status}</Chip>
+            </p>
+            <Button href="/dashboard/student/applications" variant="secondary" className="w-full">
+              View my applications
+            </Button>
+          </SidePanel>
+        ) : user.role === "student" && task.status === "open" ? (
+          <ApplyPanel
+            taskId={task.id}
+            businessName={businessName}
+            student={
+              student
+                ? {
+                    name: student.name,
+                    initials: initials(student.name),
+                    cvFileName: student.cvUrl?.split("/").pop(),
+                  }
+                : undefined
+            }
+            match={{ title: matchTitle, detail: matchDetail }}
+            startLabel={formatDate(task.startDate, false)}
+            appliedCount={applications.length}
+            alreadyApplied={false}
+          />
+        ) : null}
       </div>
     </div>
   );
 }
 
 async function Header() {
-  return <AppHeader role="student" account={headerAccount(await currentStudent())} />;
+  return <HeaderFor user={await getCurrentUser()} />;
 }
 
 export default function TaskDetailPage({ params }: { params: Promise<{ id: string }> }) {

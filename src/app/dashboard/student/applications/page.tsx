@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { Suspense } from "react";
 import { HeaderFor, initialsOf } from "@/app/students/[id]/student-header";
-import { DemoUserSwitcher } from "@/components/engagements/DemoUserSwitcher";
 import { Avatar, Button, Chip, Icon, type AvatarTone, type ChipType } from "@/components/ui";
 import { getCurrentUser } from "@/lib/auth";
 import { cn } from "@/lib/cn";
@@ -120,9 +119,8 @@ async function Applications({ tab: tabParam }: { tab?: string | string[] }) {
         {!student ? (
           <div className="flex flex-col gap-[12px] rounded-lg border border-border-subtle bg-surface-card p-[24px]">
             <p className="type-body text-text-secondary">
-              Applications belong to student accounts. Switch to a student to see theirs.
+              Applications belong to student accounts. Pick a student in the demo bar at the top of the page.
             </p>
-            <DemoUserSwitcher />
           </div>
         ) : (
           <>

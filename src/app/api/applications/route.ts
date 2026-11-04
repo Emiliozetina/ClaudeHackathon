@@ -1,4 +1,5 @@
 import { applicationsForTask, forBusiness } from "@/lib/applications";
+import { dayOf, todayUtc } from "@/lib/dates";
 import { db, newId } from "@/lib/db";
 import { fail, ok, readJson } from "@/lib/http";
 import { getActor } from "@/lib/session";
@@ -45,14 +46,24 @@ export async function POST(req: Request) {
 
   const task = db.tasks.find((t) => t.id === taskId);
   if (!task || task.status !== "open") return fail(404, "Task not found");
+  if (dayOf(task.endDate) < todayUtc())
+    return fail(409, "This task has already ended");
 
-  const existing = db.applications.find(
-    (a) =>
-      a.taskId === taskId &&
-      a.studentId === actor.profileId &&
-      a.status !== "withdrawn",
+  const previous = db.applications.find(
+    (a) => a.taskId === taskId && a.studentId === actor.profileId,
   );
-  if (existing) return fail(409, "You have already applied to this task");
+  if (previous && previous.status !== "withdrawn")
+    return fail(409, "You have already applied to this task");
+
+  const now = new Date().toISOString();
+  if (previous) {
+    // Applying again after withdrawing re-opens the same application, so there
+    // is never more than one record per student and task.
+    previous.status = "submitted";
+    previous.note = note;
+    previous.submittedAt = now;
+    return ok(previous, 201);
+  }
 
   const application: Application = {
     id: newId("app"),
@@ -60,8 +71,7 @@ export async function POST(req: Request) {
     studentId: actor.profileId,
     note,
     status: "submitted",
-    anonymous: true,
-    submittedAt: new Date().toISOString(),
+    submittedAt: now,
   };
   db.applications.push(application);
   return ok(application, 201);

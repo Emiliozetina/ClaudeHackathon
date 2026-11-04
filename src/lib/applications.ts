@@ -11,8 +11,12 @@ export interface AnonymousStudentView {
   goals: string;
 }
 
-/** Name is only revealed once the student has been chosen. */
-export interface ApplicationForBusiness extends Application {
+/**
+ * What a business sees. `studentId` is null until the student has been chosen,
+ * and the name is only revealed then too.
+ */
+export interface ApplicationForBusiness extends Omit<Application, "studentId"> {
+  studentId: ID | null;
   student: AnonymousStudentView & { name?: string };
 }
 
@@ -51,7 +55,7 @@ export function forBusiness(app: Application): ApplicationForBusiness {
       };
   return {
     ...app,
-    studentId: chosen ? app.studentId : "hidden",
+    studentId: chosen ? app.studentId : null,
     student: chosen && student ? { ...view, name: student.name } : view,
   };
 }

@@ -1,7 +1,6 @@
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
 
-import { DemoUserSwitcher } from "@/components/engagements/DemoUserSwitcher";
 import { EngagementPanel } from "@/components/engagements/EngagementPanel";
 import { AutoRefresh } from "@/components/messaging/AutoRefresh";
 import { toThreadListItems } from "@/components/messaging/toThreadListItems";
@@ -36,9 +35,6 @@ export default function MessageThreadPage({ params }: PageProps<"/messages/[thre
         <AccountHeader />
       </Suspense>
       <main className="mx-auto w-full max-w-[1240px] px-[20px] pt-[32px] pb-[40px]">
-        <Suspense fallback={null}>
-          <DemoUserSwitcher />
-        </Suspense>
         <h1 className="sr-only">Conversation</h1>
         <Suspense fallback={<p className="type-body-sm mt-[16px] text-text-secondary">Loading conversation…</p>}>
           {params.then(({ threadId }) => (
