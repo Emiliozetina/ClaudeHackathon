@@ -95,6 +95,13 @@ const icons = {
   "user-white-20": 20,
   "users-f2a541-22": 22,
   "x-5b6472-12": 12,
+  // Screens 02–05 (sign-up / sign-in).
+  "check-0e7c7b-16": 16,
+  "check-633806-14": 14,
+  "check-white-14": 14,
+  "edit-5b6472-18": 18,
+  "image-0b2545-22": 22,
+  "trash-5b6472-18": 18,
 } as const;
 
 export type IconName = keyof typeof icons;
