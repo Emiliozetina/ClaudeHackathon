@@ -81,9 +81,14 @@ export default function BusinessDashboardPage() {
               Wednesday 4 November · Here’s what’s happening with your tasks.
             </p>
           </div>
-          <Button href="/tasks/new/describe" size="lg" showArrow>
-            Post a new task
-          </Button>
+          <div className="flex flex-wrap gap-3">
+            <Button href="/dashboard/business/profile" variant="secondary" size="lg">
+              Edit profile
+            </Button>
+            <Button href="/tasks/new/describe" size="lg" showArrow>
+              Post a new task
+            </Button>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 gap-[24px] sm:grid-cols-2 lg:grid-cols-4">
